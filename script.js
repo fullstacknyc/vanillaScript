@@ -1,10 +1,10 @@
 // Array of greetings in different languages
 const greetings = [
-    { text: "Hello", lang: "English", color: "#FF5733" },
-    { text: "Bonjour", lang: "French", color: "#33FF57" },
-    { text: "Hola", lang: "Spanish", color: "#3357FF" },
-    { text: "Ciao", lang: "Italian", color: "#FF33F1" },
-    { text: "Konnichiwa", lang: "Japanese", color: "#33FFF1" }
+    { text: "Hello", color: "#FF5733" },
+    { text: "Bonjour", color: "#33FF57" },
+    { text: "Hola", color: "#3357FF" },
+    { text: "Ciao", color: "#FF33F1" },
+    { text: "Konnichiwa", color: "#33FFF1" }
   ];
   
   let currentIndex = 0;
