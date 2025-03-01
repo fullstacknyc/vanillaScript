@@ -18,9 +18,12 @@ const greetings = [
     greetingElement.style.color = currentGreeting.color;
     greetingElement.style.fontSize = "24px";
     greetingElement.style.fontWeight = "bold";
-    greetingElement.style.alignItems = "center";
-    greetingElement.style.justifyContent = "center";
-    greetingElement.style.display = "flex";
+    greetingElement.style.margin = "0";
+    greetingElement.style.marginTop = '50%';
+    greetingElement.style.width = "100%";
+    greetingElement.style.position = "absolute";
+    greetingElement.style.top = "50%";
+    greetingElement.style.transform = "translateY(-50%)";
     
     currentIndex = (currentIndex + 1) % greetings.length;
   }
@@ -29,7 +32,8 @@ const greetings = [
   const greetingElement = document.createElement("div");
   greetingElement.id = "greeting";
   document.body.appendChild(greetingElement);
-  
+  document.body.style.position = "relative";
+  document.body.appendChild(greetingElement);
   // Update greeting immediately and then every second
   updateGreeting();
   setInterval(updateGreeting, 1000);
