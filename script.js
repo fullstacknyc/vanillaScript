@@ -50,10 +50,10 @@ cursor.id = 'custom-cursor';
 document.body.appendChild(cursor);
 
 cursor.style.position = 'fixed';
-cursor.style.width = '20px';
-cursor.style.height = '20px';
+cursor.style.width = '60px';
+cursor.style.height = '60px';
 cursor.style.borderRadius = '50%';
-cursor.style.backgroundColor = 'green';
+cursor.style.backgroundColor = 'black';
 cursor.style.pointerEvents = 'none';
 cursor.style.zIndex = '9999';
 
