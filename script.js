@@ -1,4 +1,6 @@
-// Array of greetings in different languages
+document.body.style.position = "relative";
+
+// Array of greetings in different languages with text and color properties
 const greetings = [
     { text: "Hello", color: "#FF5733" },
     { text: "Bonjour", color: "#33FF57" },
@@ -14,10 +16,9 @@ const greetings = [
     const greetingElement = document.getElementById("greeting");
     const currentGreeting = greetings[currentIndex];
     
-    greetingElement.textContent = `${currentGreeting.text} (${currentGreeting.lang})`;
+    greetingElement.textContent = `${currentGreeting.text}`;
     greetingElement.style.color = currentGreeting.color;
-    greetingElement.style.fontSize = "24px";
-    greetingElement.style.fontWeight = "bold";
+    greetingElement.style.margin = "50% 0 0 0";
     greetingElement.style.margin = "0";
     greetingElement.style.marginTop = '50%';
     greetingElement.style.width = "100%";
@@ -34,7 +35,6 @@ const greetings = [
   greetingElement.id = "greeting";
   document.body.appendChild(greetingElement);
   document.body.style.position = "relative";
-  document.body.appendChild(greetingElement);
   // Update greeting immediately and then every second
   updateGreeting();
   setInterval(updateGreeting, 1000);
