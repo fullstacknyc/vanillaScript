@@ -2,15 +2,18 @@ document.body.style.position = "relative";
 document.body.style.color = "black";
 document.body.style.backgroundColor = "white";
 document.body.style.fontFamily = "Segoe UI, sans-serif";
+document.body.style.fontSize = "2em";
+document.body.style.margin = "0";
+document.body.style.padding = "0";
 document.head.title = "Vanilla Script";
 
-// Array of greetings in different languages with text and color properties
+// Array of greetings in different languages
 const greetings = [
-    { text: "Hello", color: "#FF5733" },
-    { text: "Bonjour", color: "#33FF57" },
-    { text: "Hola", color: "#3357FF" },
-    { text: "Ciao", color: "#FF33F1" },
-    { text: "Konnichiwa", color: "#33FFF1" }
+    { text: "Hello" },
+    { text: "Bonjour" },
+    { text: "Hola" },
+    { text: "Ciao" },
+    { text: "Konnichiwa" }
   ];
   
   let currentIndex = 0;
@@ -21,7 +24,6 @@ const greetings = [
     const currentGreeting = greetings[currentIndex];
     
     greetingElement.textContent = `${currentGreeting.text}`;
-    greetingElement.style.color = currentGreeting.color;
     greetingElement.style.margin = "50% 0 0 0";
     greetingElement.style.margin = "0";
     greetingElement.style.marginTop = '50%';
