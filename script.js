@@ -18,6 +18,9 @@ const greetings = [
     greetingElement.style.color = currentGreeting.color;
     greetingElement.style.fontSize = "24px";
     greetingElement.style.fontWeight = "bold";
+    greetingElement.style.alignItems = "center";
+    greetingElement.style.justifyContent = "center";
+    greetingElement.style.display = "flex";
     
     currentIndex = (currentIndex + 1) % greetings.length;
   }
