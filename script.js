@@ -23,6 +23,7 @@ const greetings = [
     greetingElement.style.width = "100%";
     greetingElement.style.position = "absolute";
     greetingElement.style.top = "50%";
+    greetingElement.style.transform = 'translateX(-50%)';
     greetingElement.style.transform = "translateY(-50%)";
     
     currentIndex = (currentIndex + 1) % greetings.length;
