@@ -1,4 +1,8 @@
 document.body.style.position = "relative";
+document.body.style.color = "black";
+document.body.style.backgroundColor = "white";
+document.body.style.fontFamily = "Segoe UI, sans-serif";
+document.head.title = "Vanilla Script";
 
 // Array of greetings in different languages with text and color properties
 const greetings = [
@@ -38,4 +42,3 @@ const greetings = [
   // Update greeting immediately and then every second
   updateGreeting();
   setInterval(updateGreeting, 1000);
-  
