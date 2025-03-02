@@ -1,11 +1,17 @@
-// Set page title and style body
-document.title = 'scripting';
-document.body.style.cssText = 'background-color: black; color: white;';
-
-// Create and style div element to display time
+const myTitle = document.createElement(`title`);
+myTitle.textContent = `pipboy 3000`;
+document.head.appendChild(myTitle);
+document.body.style.backgroundColor = `black`;
+document.body.style.color = `white`;
 const myDiv = document.createElement('div');
-myDiv.style.cssText = 'font-size: 50px; font-weight: bold; font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif; position: absolute; top: 0; right: 0;';
 document.body.appendChild(myDiv);
-
-// Update div with current time every second
-setInterval(() => myDiv.textContent = new Date().toLocaleTimeString(), 1000);
+myDiv.style.fontSize = '50px';
+myDiv.style.fontWeight = 'bold';
+myDiv.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+myDiv.style.position = 'absolute';
+myDiv.style.top = '0';
+myDiv.style.right = '0';
+function displayTime() {
+    myDiv.textContent = new Date().toLocaleTimeString();
+}
+setInterval(displayTime, 1000);
