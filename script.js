@@ -1,48 +1,16 @@
-const myTitle = document.createElement('title');
-myTitle.textContent = 'very useful website';
-document.head.appendChild(myTitle);
-document.body.style.backgroundColor = 'black';
-document.body.style.color = 'white';
-const myDiv = document.createElement('div');
-document.body.appendChild(myDiv);
-myDiv.style.fontSize = '50px';
-myDiv.style.fontWeight = 'bold';
-myDiv.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
-myDiv.style.padding = '20px';
-const timeDiv = document.createElement('div');
-const dateDiv = document.createElement('div');
-myDiv.appendChild(timeDiv);
-const scrollText = document.createElement('div');
-scrollText.textContent = "";
-scrollText.style.opacity = '0';
-scrollText.style.transition = 'opacity 0.5s';
-scrollText.appendChild(dateDiv);
-myDiv.appendChild(scrollText);
-const style = document.createElement('style');
-style.innerHTML = `
-    @keyframes slideInFromLeft {
-        0% { left: -100%; }
-        100% { left: 50%; }
-    }
-    body {
-        height: 200vh;
-    }
-    #myDiv {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
-    #timeDiv, #dateDiv, #scrollText {
-        transition: opacity 0.5s;
-    }
-`;
-document.head.appendChild(style);
+document.head.innerHTML += '<title>very useful website</title><style>@keyframes slideInFromLeft{0%{left:-100%}100%{left:50%}}body{height:200vh}#myDiv{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}#timeDiv,#dateDiv,#scrollText{transition:opacity 0.5s}</style>';
+document.body.style.cssText = 'background-color:black;color:white';
+const myDiv = document.body.appendChild(document.createElement('div'));
 myDiv.id = 'myDiv';
+myDiv.style.cssText = 'font-size:50px;font-weight:bold;font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;padding:20px';
+const timeDiv = myDiv.appendChild(document.createElement('div'));
 timeDiv.id = 'timeDiv';
-dateDiv.id = 'dateDiv';
+const scrollText = myDiv.appendChild(document.createElement('div'));
 scrollText.id = 'scrollText';
+scrollText.style.cssText = 'opacity:0;transition:opacity 0.5s';
+const dateDiv = scrollText.appendChild(document.createElement('div'));
+dateDiv.id = 'dateDiv';
+
 function displayTime() {
     const now = new Date();
     timeDiv.textContent = now.toLocaleTimeString();
@@ -50,6 +18,7 @@ function displayTime() {
 }
 displayTime();
 setInterval(displayTime, 1000);
+
 window.addEventListener('scroll', () => {
     const scrollPosition = window.scrollY;
     const windowHeight = window.innerHeight;
