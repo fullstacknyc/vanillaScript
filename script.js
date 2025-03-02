@@ -148,3 +148,28 @@ clickables.forEach(el => {
     });
   });
 });
+
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault(); // Prevent the default context menu
+  showCustomMenu(e.clientX, e.clientY);
+});
+
+function showCustomMenu(x, y) {
+  const menu = document.getElementById('custom-menu');
+  menu.style.display = 'block';
+  menu.style.left = x + 'px';
+  menu.style.top = y + 'px';
+}
+
+document.addEventListener('click', function() {
+  document.getElementById('custom-menu').style.display = 'none';
+});
+
+const menuHTML = `
+  <div id="custom-menu" style="display:none; position:fixed; background-color:#fff; border:1px solid #ccc;">
+    <div class="menu-item">my website</div>
+    <div class="menu-item">instagram</div>
+    <div class="menu-item">chime</div>
+  </div>
+`;
+document.body.insertAdjacentHTML('beforeend', menuHTML);
