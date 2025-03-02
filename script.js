@@ -1,24 +1,11 @@
-//Writing the title of the page using JavaScript
-const myTitle = document.createElement(`title`);
-myTitle.innerHTML = `scripting`;
-document.head.appendChild(myTitle);
-//styling the body using JavaScript
-document.body.style.backgroundColor = `black`;
-document.body.style.color = `white`;
-//creating a div element
+// Set page title and style body
+document.title = 'scripting';
+document.body.style.cssText = 'background-color: black; color: white;';
+
+// Create and style div element to display time
 const myDiv = document.createElement('div');
-myDiv.textContent = undefined;
+myDiv.style.cssText = 'font-size: 50px; font-weight: bold; font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif; position: absolute; top: 0; right: 0;';
 document.body.appendChild(myDiv);
-//styling the div element
-myDiv.style.fontSize = `50px`;
-myDiv.style.fontWeight = `bold`;
-myDiv.style.fontFamily = `Segoe UI, Tahoma, Geneva, Verdana, sans-serif`;
-//making the time positioned absolutely on the top right corner
-myDiv.style.position = `absolute`;
-myDiv.style.top = `0`;
-myDiv.style.right = `0`;
-//making myDiv to display the current time
-function displayTime() {
-    myDiv.textContent = new Date().toLocaleTimeString();
-}
-setInterval(displayTime, 1000);
+
+// Update div with current time every second
+setInterval(() => myDiv.textContent = new Date().toLocaleTimeString(), 1000);
