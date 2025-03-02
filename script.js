@@ -1,3 +1,4 @@
+// Set body styles
 document.body.style.position = "relative";
 document.body.style.color = "black";
 document.body.style.backgroundColor = "white";
@@ -5,6 +6,9 @@ document.body.style.fontFamily = "Segoe UI, sans-serif";
 document.body.style.fontSize = "2em";
 document.body.style.margin = "0";
 document.body.style.padding = "0";
+document.body.style.cursor = 'none';
+
+// Set page title
 document.head.title = "Vanilla Script";
 
 // Array of greetings in different languages
@@ -24,7 +28,6 @@ function updateGreeting() {
   const currentGreeting = greetings[currentIndex];
 
   greetingElement.textContent = `${currentGreeting.text}`;
-  greetingElement.style.margin = "50% 0 0 0";
   greetingElement.style.margin = "0";
   greetingElement.style.marginTop = '50%';
   greetingElement.style.width = "100%";
@@ -40,20 +43,22 @@ function updateGreeting() {
 const greetingElement = document.createElement("div");
 greetingElement.id = "greeting";
 document.body.appendChild(greetingElement);
-document.body.style.position = "relative";
+
 // Update greeting immediately and then every second
 updateGreeting();
 setInterval(updateGreeting, 1000);
 
+// Create custom cursor
 const cursor = document.createElement('div');
 cursor.id = 'custom-cursor';
 document.body.appendChild(cursor);
 
 cursor.style.backgroundColor = 'transparent';
-cursor.style.border = '2px solid black';
+cursor.style.border = '1px solid black';
 cursor.style.mixBlendMode = 'difference';
-cursor.style.transition = 'transform 0.3s ease';
+cursor.style.transition = 'transform 0.3s fade 0.3s';
 
+// Add flame effect styles
 const style = document.createElement('style');
 style.textContent = `
   #custom-cursor::before,
@@ -84,6 +89,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Create trail effect
 const trailCount = 5;
 const trails = [];
 
@@ -105,6 +111,7 @@ for (let i = 0; i < trailCount; i++) {
   trails.push(trail);
 }
 
+// Event listeners for cursor and trail movement
 document.addEventListener('mousemove', (e) => {
   cursor.style.left = e.clientX + 'px';
   cursor.style.top = e.clientY + 'px';
@@ -117,14 +124,7 @@ document.addEventListener('mousemove', (e) => {
   });
 });
 
-
-document.body.style.cursor = 'none';
-
-document.addEventListener('mousemove', (e) => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
-
+// Event listeners for cursor click effects
 document.addEventListener('mousedown', () => {
   cursor.style.transform = 'scale(0.8)';
 });
@@ -133,6 +133,7 @@ document.addEventListener('mouseup', () => {
   cursor.style.transform = 'scale(1)';
 });
 
+// Event listeners for clickable elements
 const clickables = document.querySelectorAll('a, button, input[type="submit"]');
 
 clickables.forEach(el => {
@@ -148,28 +149,3 @@ clickables.forEach(el => {
     });
   });
 });
-
-document.addEventListener('contextmenu', function(e) {
-  e.preventDefault(); // Prevent the default context menu
-  showCustomMenu(e.clientX, e.clientY);
-});
-
-function showCustomMenu(x, y) {
-  const menu = document.getElementById('custom-menu');
-  menu.style.display = 'block';
-  menu.style.left = x + 'px';
-  menu.style.top = y + 'px';
-}
-
-document.addEventListener('click', function() {
-  document.getElementById('custom-menu').style.display = 'none';
-});
-
-const menuHTML = `
-  <div id="custom-menu" style="display:none; position:fixed; background-color:#fff; border:1px solid #ccc;">
-    <div class="menu-item">my website</div>
-    <div class="menu-item">instagram</div>
-    <div class="menu-item">chime</div>
-  </div>
-`;
-document.body.insertAdjacentHTML('beforeend', menuHTML);
