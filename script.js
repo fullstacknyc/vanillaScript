@@ -1,5 +1,5 @@
 const myTitle = document.createElement('title');
-myTitle.textContent = 'pipboy 3000';
+myTitle.textContent = 'very useful website';
 document.head.appendChild(myTitle);
 
 document.body.style.backgroundColor = 'black';
