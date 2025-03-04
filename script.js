@@ -1,119 +1,47 @@
-// Add title and styles to the document head
 document.head.innerHTML += `
     <title>Very Useful Website</title>
     <style>
-        @keyframes slideInFromLeft { 
-            0% { left: -100%; } 
-            100% { left: 50%; } 
-        }
-        body {
-            height: 500vh;
-            background-color: black;
-            color: white;
-            margin: 0;
-        }
+        body { height: 500vh; background: black; color: white; margin: 0; }
         #myDiv {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            font-size: 50px;
-            font-weight: bold;
-            font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; font-size: 50px; font-weight: bold;
+            font-family: Segoe UI, sans-serif; padding: 20px;
         }
-        .content {
-            opacity: 0;
-            transition: opacity 0.5s;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .content.active {
-            opacity: 1;
-        }
+        .content { opacity: 0; transition: opacity 0.5s; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .content.active { opacity: 1; }
     </style>
 `;
 
-// Add main container and content divs
 document.body.innerHTML += `
     <div id="myDiv">
-        <div class="content" id="timeDiv"></div>
-        <div class="content" id="dateDiv"></div>
-        <div class="content" id="ipDiv">Loading IP...</div>
-        <div class="content" id="locationDiv">Loading location...</div>
-        <div class="content" id="dimensionsDiv"></div>
+        ${['time', 'date', 'ip', 'location', 'dimensions'].map(id => `<div class="content" id="${id}Div"></div>`).join('')}
     </div>
 `;
 
-// Function to display the current time and date
-function displayTime() {
+const updateElement = (id, text) => document.getElementById(id + 'Div').textContent = text;
+
+const updateInfo = async () => {
     const now = new Date();
-    document.getElementById('timeDiv').textContent = `Time: ${now.toLocaleTimeString()}`;
-    document.getElementById('dateDiv').textContent = `Date: ${now.toLocaleDateString()}`;
-}
+    updateElement('time', `Time: ${now.toLocaleTimeString()}`);
+    updateElement('date', `Date: ${now.toLocaleDateString()}`);
+    updateElement('dimensions', `Browser: ${window.innerWidth}x${window.innerHeight}`);
 
-// Function to get and display IP address
-async function displayIP() {
     try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        document.getElementById('ipDiv').textContent = `IP: ${data.ip}`;
-    } catch (error) {
-        document.getElementById('ipDiv').textContent = 'Failed to get IP';
+        const ip = await (await fetch('https://api.ipify.org?format=json')).json();
+        updateElement('ip', `IP: ${ip.ip}`);
+        const loc = await (await fetch('https://ipapi.co/json/')).json();
+        updateElement('location', `Location: ${loc.city}, ${loc.region}, ${loc.country_name}`);
+    } catch (e) {
+        console.error('Failed to fetch IP or location');
     }
-}
+};
 
-// Function to get and display location
-async function displayLocation() {
-    try {
-        const response = await fetch('https://ipapi.co/json/');
-        const data = await response.json();
-        document.getElementById('locationDiv').textContent = `Location: ${data.city}, ${data.region}, ${data.country_name}`;
-    } catch (error) {
-        document.getElementById('locationDiv').textContent = 'Failed to get location';
-    }
-}
+setInterval(updateInfo, 1000);
+updateInfo();
 
-// Function to display browser dimensions
-function displayDimensions() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    document.getElementById('dimensionsDiv').textContent = `Browser dimensions: ${width}x${height}`;
-}
-
-// Call the functions
-displayTime();
-displayIP();
-displayLocation();
-displayDimensions();
-
-// Set intervals for updating time and dimensions
-setInterval(displayTime, 1000);
-setInterval(displayDimensions, 1000); // Update dimensions every second in case of resize
-
-// Function to update which content is visible based on scroll position
-function updateContent() {
-    const contents = document.querySelectorAll('.content');
+window.onscroll = () => {
     const scrollPosition = window.scrollY;
-    const windowHeight = window.innerHeight;
-
-    contents.forEach((content, index) => {
-        const thresholdStart = windowHeight * index * 0.8;
-        const thresholdEnd = thresholdStart + windowHeight * 0.8;
-
-        if (scrollPosition >= thresholdStart && scrollPosition < thresholdEnd) {
-            content.classList.add('active');
-        } else {
-            content.classList.remove('active');
-        }
+    document.querySelectorAll('.content').forEach((content, i) => {
+        content.classList.toggle('active', scrollPosition >= window.innerHeight * i * 0.8 && scrollPosition < window.innerHeight * (i + 1) * 0.8);
     });
-}
-
-// Add scroll event listener to update content visibility
-window.addEventListener('scroll', updateContent);
-
-// Initialize the first content as active
-updateContent();
+};
