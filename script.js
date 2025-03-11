@@ -1,5 +1,5 @@
 document.head.innerHTML += `
-    <title>Very Useful Website</title>
+    <title>Stop Scrolling</title>
     <style>
         body { height: 500vh; background: black; color: white; margin: 0; }
         #myDiv {
@@ -7,7 +7,7 @@ document.head.innerHTML += `
             text-align: center; font-size: 50px; font-weight: bold;
             font-family: Segoe UI, sans-serif; padding: 20px;
         }
-        .content { opacity: 0; transition: opacity 0.5s; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .content { opacity: 0; transition: opacity 0.5s; position: absolute; top: 50%;  50%; transform: translate(-50%, -50%); }
         .content.active { opacity: 1; }
     </style>
 `;
