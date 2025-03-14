@@ -107,6 +107,85 @@ class Cloud {
     }
 }
 
+class Bee {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.speed = Math.random() * 1 + 0.5; // Random speed
+        this.angle = Math.random() * Math.PI * 2; // Random initial angle
+        this.flowerTarget = null; // The flower the bee is currently targeting
+    }
+
+    update(flowers) {
+        // If the bee doesn't have a flower target, find one
+        if (!this.flowerTarget) {
+            this.flowerTarget = this.findClosestFlower(flowers);
+        }
+
+        // If the bee has a flower target, move towards it
+        if (this.flowerTarget) {
+            const dx = this.flowerTarget.x - this.x;
+            const dy = this.flowerTarget.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // If the bee is close enough to the flower, stop targeting it
+            if (distance < 20) {
+                this.flowerTarget = null;
+            } else {
+                // Move towards the flower
+                this.angle = Math.atan2(dy, dx);
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+            }
+        } else {
+            // If the bee doesn't have a flower target, move randomly
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+
+            // Change direction randomly
+            if (Math.random() < 0.02) {
+                this.angle += (Math.random() - 0.5) * Math.PI * 0.5;
+            }
+        }
+
+        // Keep the bee within the bounds of the canvas
+        if (this.x < 0) this.x = this.canvas.width;
+        if (this.x > this.canvas.width) this.x = 0;
+        if (this.y < 0) this.y = this.canvas.height;
+        if (this.y > this.canvas.height) this.y = 0;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = 'yellow';
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y, 5, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(this.x - 2, this.y - 3, 1, 0, Math.PI * 2);
+        ctx.arc(this.x + 2, this.y - 3, 1, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    findClosestFlower(flowers) {
+        let closestFlower = null;
+        let closestDistance = Infinity;
+
+        for (const flower of flowers) {
+            const dx = flower.x - this.x;
+            const dy = flower.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestFlower = flower;
+            }
+        }
+
+        return closestFlower;
+    }
+}
+
 class Garden {
     constructor(canvas) {
         this.canvas = canvas;
@@ -114,6 +193,7 @@ class Garden {
         this.flowers = [];
         this.currentColor = '#FF1493'; // Default color
         this.clouds = []; // Array to hold clouds
+        this.bees = []; // Array to hold bees
         this.init();
     }
 
@@ -124,6 +204,7 @@ class Garden {
         window.addEventListener('resize', () => this.resizeCanvas());
         this.setupColorPalette();
         this.createClouds(); // Create initial clouds
+        this.createBees(); // Create initial bees
         this.animate();
     }
 
@@ -134,6 +215,15 @@ class Garden {
             const y = Math.random() * this.canvas.height * 0.3;
             const speed = Math.random() * 0.5 + 0.2;
             this.clouds.push(new Cloud(x, y, speed));
+        }
+    }
+
+    createBees() {
+        // Create multiple bees with random positions
+        for (let i = 0; i < 5; i++) {
+            const x = Math.random() * this.canvas.width;
+            const y = Math.random() * this.canvas.height * 0.8;
+            this.bees.push(new Bee(x, y));
         }
     }
 
@@ -172,6 +262,13 @@ class Garden {
                 cloud.y = Math.random() * this.canvas.height * 0.3; // New random y position
             }
             cloud.draw(this.ctx);
+        });
+
+        // Update and draw bees
+        this.bees.forEach(bee => {
+            bee.canvas = this.canvas;
+            bee.update(this.flowers);
+            bee.draw(this.ctx);
         });
 
         // Only update and draw growing flowers
