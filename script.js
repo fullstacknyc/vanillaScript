@@ -7,15 +7,12 @@ class Flower {
         this.growing = true;
         this.maxHeight = Math.random() * 100 + 100; // Random max height between 100 and 200
         this.color = color;
-        this.rotation = 0; // Rotation for 3D effect
-        this.curveOffset = Math.random() * 20 - 10; // Random offset for stem curvature
     }
 
     update() {
         if (this.growing) {
             this.height += 2; // Increase height
             this.width += 0.5; // Increase width
-            this.rotation += 0.05; // Slight rotation for 3D effect
             if (this.height >= this.maxHeight) {
                 this.growing = false; // Stop growing after reaching a certain height
             }
@@ -28,16 +25,7 @@ class Flower {
         stemGradient.addColorStop(0, '#4CAF50'); // Dark green
         stemGradient.addColorStop(1, '#228B22'); // Forest green
         ctx.fillStyle = stemGradient;
-
-        // Draw curved stem using a quadratic Bezier curve
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        const controlPointX = this.x + this.curveOffset; // Control point for curvature
-        const controlPointY = this.y - this.height / 2; // Control point height
-        ctx.quadraticCurveTo(controlPointX, controlPointY, this.x, this.y - this.height);
-        ctx.lineWidth = 10; // Stem width
-        ctx.strokeStyle = ctx.fillStyle; // Use the same gradient for the stroke
-        ctx.stroke();
+        ctx.fillRect(this.x - 5, this.y, 10, -this.height);
 
         // Draw petals with gradient and shadow
         const petalGradient = ctx.createRadialGradient(this.x, this.y - this.height, this.width * 0.5, this.x, this.y - this.height, this.width);
@@ -45,19 +33,13 @@ class Flower {
         petalGradient.addColorStop(1, '#FFFFFF'); // White highlight for petals
         ctx.fillStyle = petalGradient;
 
-        ctx.save(); // Save the current context
-        ctx.translate(this.x, this.y - this.height); // Move to flower position
-        ctx.rotate(this.rotation); // Apply rotation for 3D effect
-
         ctx.beginPath();
-        ctx.ellipse(0, 0, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
         
         ctx.beginPath();
-        ctx.ellipse(0, 0, this.width, this.width * 0.6, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.restore(); // Restore the context to its original state
 
         // Draw center of the rose with a shadow
         ctx.fillStyle = '#FF69B4'; // Light pink color for the center
