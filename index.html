@@ -14,16 +14,29 @@
             display: block;
             cursor: pointer; /* Change cursor to pointer */
         }
-        #colorPicker {
+        #colorPalette {
             position: absolute;
             top: 10px;
             left: 10px;
             z-index: 10;
         }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            border: 2px solid #fff;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <input type="color" id="colorPicker" value="#FF1493">
+    <div id="colorPalette">
+        <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
+        <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
+        <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
+        <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
+        <div class="color-option" style="background-color: #9370DB;" data-color="#9370DB"></div>
+    </div>
     <canvas id="roseCanvas"></canvas>
     <script src="script.js"></script>
 </body>

@@ -47,7 +47,7 @@ class Garden {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.flowers = [];
-        this.colorPicker = document.getElementById('colorPicker');
+        this.currentColor = '#FF1493'; // Default color
         this.init();
     }
 
@@ -56,7 +56,17 @@ class Garden {
         this.canvas.height = window.innerHeight;
         this.canvas.addEventListener('click', (event) => this.addFlower(event));
         window.addEventListener('resize', () => this.resizeCanvas());
+        this.setupColorPalette();
         this.animate();
+    }
+
+    setupColorPalette() {
+        const colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+            option.addEventListener('click', (event) => {
+                this.currentColor = event.target.getAttribute('data-color');
+            });
+        });
     }
 
     // Create: Add a new flower
@@ -64,28 +74,8 @@ class Garden {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left; // Get x position relative to canvas
         const y = event.clientY - rect.top; // Get y position relative to canvas
-        const flowerColor = this.colorPicker.value;
 
-        this.flowers.push(new Flower(x, y, flowerColor));
-    }
-
-    // Read: Get all flowers
-    getFlowers() {
-        return this.flowers;
-    }
-
-    // Update: Update a specific flower's properties
-    updateFlower(index, newProperties) {
-        if (this.flowers[index]) {
-            Object.assign(this.flowers[index], newProperties);
-        }
-    }
-
-    // Delete: Remove a flower by index
-    deleteFlower(index) {
-        if (this.flowers[index]) {
-            this.flowers.splice(index, 1);
-        }
+        this.flowers.push(new Flower(x, y, this.currentColor));
     }
 
     resizeCanvas() {
