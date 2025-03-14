@@ -7,12 +7,14 @@ class Flower {
         this.growing = true;
         this.maxHeight = Math.random() * 100 + 100; // Random max height between 100 and 200
         this.color = color;
+        this.rotation = 0; // Rotation for 3D effect
     }
 
     update() {
         if (this.growing) {
             this.height += 2; // Increase height
             this.width += 0.5; // Increase width
+            this.rotation += 0.05; // Slight rotation for 3D effect
             if (this.height >= this.maxHeight) {
                 this.growing = false; // Stop growing after reaching a certain height
             }
@@ -33,13 +35,19 @@ class Flower {
         petalGradient.addColorStop(1, '#FFFFFF'); // White highlight for petals
         ctx.fillStyle = petalGradient;
 
+        ctx.save(); // Save the current context
+        ctx.translate(this.x, this.y - this.height); // Move to flower position
+        ctx.rotate(this.rotation); // Apply rotation for 3D effect
+
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
         
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, this.width, this.width * 0.6, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.restore(); // Restore the context to its original state
 
         // Draw center of the rose with a shadow
         ctx.fillStyle = '#FF69B4'; // Light pink color for the center
