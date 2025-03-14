@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Growing Rose Animation</title>
+    <title>Interactive Growing Rose Garden</title>
     <style>
         body {
-            background-color: #87CEEB; /* Sky blue */
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 100vh;
             margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
         canvas {
-            border: 1px solid #000;
+            display: block;
             cursor: pointer; /* Change cursor to pointer */
+        }
+        #colorPicker {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
-    <canvas id="roseCanvas" width="800" height="600"></canvas>
+    <input type="color" id="colorPicker" value="#FF1493">
+    <canvas id="roseCanvas"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
