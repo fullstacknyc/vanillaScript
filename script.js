@@ -7,6 +7,10 @@ class Flower {
         this.growing = true;
         this.maxHeight = Math.random() * 100 + 100; // Random max height between 100 and 200
         this.color = color;
+        this.petalVariation = Math.random() * 0.2 + 0.9; // Petal size variation
+        this.swayAngle = Math.random() * Math.PI * 2; // Initial sway angle
+        this.swaySpeed = Math.random() * 0.02 + 0.01; // Sway speed
+        this.swayAmplitude = Math.random() * 2; // Sway amplitude
     }
 
     update() {
@@ -17,35 +21,44 @@ class Flower {
                 this.growing = false; // Stop growing after reaching a certain height
             }
         }
+        this.swayAngle += this.swaySpeed; // Update sway angle
     }
 
     draw(ctx) {
+        ctx.save(); // Save the current context state
+
+        // Swaying animation
+        ctx.translate(this.x + Math.sin(this.swayAngle) * this.swayAmplitude, this.y);
+        ctx.rotate(Math.sin(this.swayAngle) * 0.05); // Rotate the flower
+
         // Draw stem with a gradient
-        const stemGradient = ctx.createLinearGradient(this.x - 5, this.y, this.x + 5, this.y - this.height);
+        const stemGradient = ctx.createLinearGradient(-5, 0, 5, -this.height);
         stemGradient.addColorStop(0, '#4CAF50'); // Dark green
         stemGradient.addColorStop(1, '#228B22'); // Forest green
         ctx.fillStyle = stemGradient;
-        ctx.fillRect(this.x - 5, this.y, 10, -this.height);
+        ctx.fillRect(-5, 0, 10, -this.height);
 
         // Draw petals with gradient and shadow
-        const petalGradient = ctx.createRadialGradient(this.x, this.y - this.height, this.width * 0.5, this.x, this.y - this.height, this.width);
+        const petalGradient = ctx.createRadialGradient(0, -this.height, this.width * 0.5, 0, -this.height, this.width);
         petalGradient.addColorStop(0, this.color);
         petalGradient.addColorStop(1, '#FFFFFF'); // White highlight for petals
         ctx.fillStyle = petalGradient;
 
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(0, -this.height, this.width * this.petalVariation, this.width * 0.6 * this.petalVariation, Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
         
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, -Math.PI / 4, 0, Math.PI * 2);
+        ctx.ellipse(0, -this.height, this.width * this.petalVariation, this.width * 0.6 * this.petalVariation, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw center of the rose with a shadow
         ctx.fillStyle = '#FF69B4'; // Light pink color for the center
         ctx.beginPath();
-        ctx.arc(this.x, this.y - this.height, this.width * 0.4, 0, Math.PI * 2);
+        ctx.arc(0, -this.height, this.width * 0.4, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.restore(); // Restore the context to the original state
     }
 }
 
@@ -93,10 +106,15 @@ class Garden {
     animate() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawBackground();
+        
+        // Only update and draw growing flowers
         this.flowers.forEach(flower => {
             flower.update();
             flower.draw(this.ctx);
         });
+        
+        this.flowers = this.flowers.filter(flower => flower.growing || flower.height < flower.maxHeight); // Keep flowers in array if they are still growing or haven't reached max height
+
         requestAnimationFrame(() => this.animate());
     }
 
@@ -107,11 +125,28 @@ class Garden {
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // Draw ground
+        this.ctx.fillStyle = '#6B8E23'; // Olive drab
+        this.ctx.fillRect(0, this.canvas.height * 0.8, this.canvas.width, this.canvas.height * 0.2);
+
+        // Draw hills
+        this.drawHill(this.canvas.width * 0.2, this.canvas.height * 0.8, this.canvas.width * 0.3, this.canvas.height * 0.1);
+        this.drawHill(this.canvas.width * 0.7, this.canvas.height * 0.8, this.canvas.width * 0.4, this.canvas.height * 0.15);
+
         // Draw animated clouds
         this.drawCloud(100, 100);
         this.drawCloud(300, 80);
         this.drawCloud(500, 120);
         this.drawSun(700, 100);
+    }
+
+    drawHill(x, y, width, height) {
+        this.ctx.fillStyle = '#8FBC8F'; // Dark sea green
+        this.ctx.beginPath();
+        this.ctx.moveTo(x, y);
+        this.ctx.quadraticCurveTo(x + width / 2, y - height * 2, x + width, y);
+        this.ctx.closePath();
+        this.ctx.fill();
     }
 
     drawCloud(x, y) {
