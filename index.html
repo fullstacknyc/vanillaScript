@@ -13,10 +13,9 @@
         }
         canvas {
             display: block;
-            cursor: pointer; /* Change cursor to pointer */
         }
         #colorPalette {
-            position: absolute;
+            position: fixed;
             top: 10px;
             left: 10px;
             z-index: 10;
@@ -31,14 +30,14 @@
     </style>
 </head>
 <body>
-    <div id="colorPalette" style="position: fixed; top: 10px; left: 10px; z-index: 2000;">
+    <div id="colorPalette">
         <div class="color-option" style="background-color: #FF1493;" data-color="#FF1493"></div>
         <div class="color-option" style="background-color: #FFD700;" data-color="#FFD700"></div>
         <div class="color-option" style="background-color: #FF4500;" data-color="#FF4500"></div>
         <div class="color-option" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
         <div class="color-option" style="background-color: #9370DB;" data-color="#9370DB"></div>
     </div>
-    <canvas id="roseCanvas"></canvas>
+    <canvas id="gardenCanvas"></canvas>
     <script src="script.js"></script>
 </body>
 </html>
