@@ -399,7 +399,7 @@ class Garden {
         this.ctx.fillStyle = 'yellow';
         this.ctx.beginPath();
         this.ctx.arc(x, y, 30, 0, Math.PI * 2);
-        ctx.fill();
+        this.ctx.fill(); // Fixed: changed ctx to this.ctx
     }
 }
 
