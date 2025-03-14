@@ -402,7 +402,247 @@ class Garden {
         this.ctx.fill(); // Fixed: changed ctx to this.ctx
     }
 }
+// Add this new class for game state management
+class GameState {
+    constructor() {
+        this.level = 1;
+        this.score = 0;
+        this.targetScore = 50;
+        this.pollinatedFlowers = 0;
+        this.totalFlowers = 0;
+        this.achievements = new Set();
+        this.timeElapsed = 0;
+        this.lastUpdate = Date.now();
+    }
 
+    update() {
+        const now = Date.now();
+        this.timeElapsed += now - this.lastUpdate;
+        this.lastUpdate = now;
+
+        // Check for level progression
+        if (this.score >= this.targetScore) {
+            this.levelUp();
+        }
+
+        // Check achievements
+        this.checkAchievements();
+    }
+
+    levelUp() {
+        this.level++;
+        this.targetScore = Math.floor(this.targetScore * 1.5);
+        // Reward player with more bees on level up
+        return true;
+    }
+
+    checkAchievements() {
+        // First Blood
+        if (this.pollinatedFlowers === 1 && !this.achievements.has('firstPollination')) {
+            this.achievements.add('firstPollination');
+            return 'First Pollination!';
+        }
+        // Garden Master
+        if (this.pollinatedFlowers === 10 && !this.achievements.has('gardenMaster')) {
+            this.achievements.add('gardenMaster');
+            return 'Garden Master!';
+        }
+        return null;
+    }
+
+    formatTime() {
+        const seconds = Math.floor(this.timeElapsed / 1000);
+        const minutes = Math.floor(seconds / 60);
+        return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
+    }
+}
+
+// Add this to handle UI notifications
+class NotificationManager {
+    constructor() {
+        this.notifications = [];
+        this.container = document.createElement('div');
+        this.container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        `;
+        document.body.appendChild(this.container);
+    }
+
+    show(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            background-color: ${type === 'success' ? '#4CAF50' : '#f44336'};
+            color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        `;
+        notification.textContent = message;
+        this.container.appendChild(notification);
+
+        // Fade in
+        setTimeout(() => notification.style.opacity = '1', 10);
+
+        // Remove after animation
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => this.container.removeChild(notification), 300);
+        }, 2000);
+    }
+}
+
+// Modify the Garden class to include game state
+class Garden {
+    constructor(canvas) {
+        // Existing properties...
+        this.gameState = new GameState();
+        this.notifications = new NotificationManager();
+        this.paused = false;
+        this.debug = false;
+        
+        // Add UI elements
+        this.createUI();
+    }
+
+    createUI() {
+        // Create UI container
+        const ui = document.createElement('div');
+        ui.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        `;
+        document.body.appendChild(ui);
+
+        // Create pause button
+        const pauseBtn = document.createElement('button');
+        pauseBtn.textContent = '⏸️';
+        pauseBtn.style.cssText = `
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 5px;
+        `;
+        pauseBtn.onclick = () => this.togglePause();
+        document.body.appendChild(pauseBtn);
+
+        this.ui = ui;
+    }
+
+    togglePause() {
+        this.paused = !this.paused;
+        if (this.paused) {
+            this.notifications.show('Game Paused');
+        } else {
+            this.notifications.show('Game Resumed');
+        }
+    }
+
+    updateUI() {
+        this.ui.innerHTML = `
+            <div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px;">
+                <div>Level: ${this.gameState.level}</div>
+                <div>Score: ${this.gameState.score} / ${this.gameState.targetScore}</div>
+                <div>Time: ${this.gameState.formatTime()}</div>
+                <div>Flowers: ${this.gameState.pollinatedFlowers} / ${this.gameState.totalFlowers}</div>
+            </div>
+        `;
+    }
+
+    handleClick(event) {
+        if (this.paused) return;
+
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const clickedFlower = this.flowers.find(flower => {
+            const dx = flower.x - x;
+            const dy = (flower.y - flower.height) - y;
+            return Math.sqrt(dx * dx + dy * dy) < 30;
+        });
+
+        if (clickedFlower) {
+            if (clickedFlower.pollinate(Date.now())) {
+                this.gameState.score += 10;
+                this.gameState.pollinatedFlowers++;
+                const achievement = this.gameState.checkAchievements();
+                if (achievement) {
+                    this.notifications.show(achievement);
+                }
+                if (this.gameState.levelUp()) {
+                    this.notifications.show(`Level ${this.gameState.level}! More bees incoming!`);
+                    this.createBees(2); // Add 2 more bees on level up
+                }
+            }
+        } else {
+            this.addFlower(event);
+            this.gameState.totalFlowers++;
+        }
+    }
+
+    animate() {
+        const currentTime = Date.now();
+        
+        if (!this.paused) {
+            this.gameState.update();
+            this.updateUI();
+            
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawBackground();
+            
+            // Update and draw game elements
+            this.clouds.forEach(cloud => {
+                cloud.update();
+                if (cloud.x < -50) {
+                    cloud.x = this.canvas.width + 50;
+                    cloud.y = Math.random() * this.canvas.height * 0.3;
+                }
+                cloud.draw(this.ctx);
+            });
+
+            this.bees.forEach(bee => {
+                bee.canvas = this.canvas;
+                bee.update(this.flowers, currentTime);
+                bee.draw(this.ctx);
+            });
+
+            this.flowers.forEach(flower => {
+                flower.update();
+                flower.draw(this.ctx);
+            });
+
+            // Debug information
+            if (this.debug) {
+                this.drawDebugInfo();
+            }
+        }
+
+        requestAnimationFrame(() => this.animate());
+    }
+
+    drawDebugInfo() {
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = '12px Arial';
+        this.ctx.fillText(`FPS: ${Math.round(1000 / (Date.now() - this.lastFrame))}`, 10, 60);
+        this.ctx.fillText(`Active Flowers: ${this.flowers.length}`, 10, 80);
+        this.ctx.fillText(`Active Bees: ${this.bees.length}`, 10, 100);
+        this.lastFrame = Date.now();
+    }
+}
 // Initialize the garden
 const canvas = document.getElementById('roseCanvas');
 const garden = new Garden(canvas);
