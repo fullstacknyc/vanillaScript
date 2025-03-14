@@ -53,7 +53,7 @@ class Flower {
         // Draw leaves
         this.leafNodes.forEach(leaf => {
             ctx.save();
-            ctx.translate(0, -leaf.position);
+            ctx.translate(0, -this.height + leaf.position); // Corrected leaf position
             ctx.rotate(leaf.angle);
             ctx.fillStyle = '#388E3C'; // Darker green for leaves
             ctx.beginPath();
@@ -86,12 +86,34 @@ class Flower {
     }
 }
 
+class Cloud {
+    constructor(x, y, speed) {
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+    }
+
+    update() {
+        this.x -= this.speed;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
+        ctx.arc(this.x + 20, this.y, 25, 0, Math.PI * 2);
+        ctx.arc(this.x + 40, this.y, 20, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
 class Garden {
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.flowers = [];
         this.currentColor = '#FF1493'; // Default color
+        this.clouds = []; // Array to hold clouds
         this.init();
     }
 
@@ -101,7 +123,18 @@ class Garden {
         this.canvas.addEventListener('click', (event) => this.addFlower(event));
         window.addEventListener('resize', () => this.resizeCanvas());
         this.setupColorPalette();
+        this.createClouds(); // Create initial clouds
         this.animate();
+    }
+
+    createClouds() {
+        // Create multiple clouds with random positions and speeds
+        for (let i = 0; i < 3; i++) {
+            const x = Math.random() * this.canvas.width;
+            const y = Math.random() * this.canvas.height * 0.3;
+            const speed = Math.random() * 0.5 + 0.2;
+            this.clouds.push(new Cloud(x, y, speed));
+        }
     }
 
     setupColorPalette() {
@@ -131,6 +164,16 @@ class Garden {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawBackground();
         
+        // Update and draw clouds
+        this.clouds.forEach(cloud => {
+            cloud.update();
+            if (cloud.x < -50) { // If cloud is off-screen
+                cloud.x = this.canvas.width + 50; // Reset to right side
+                cloud.y = Math.random() * this.canvas.height * 0.3; // New random y position
+            }
+            cloud.draw(this.ctx);
+        });
+
         // Only update and draw growing flowers
         this.flowers.forEach(flower => {
             flower.update();
@@ -158,9 +201,6 @@ class Garden {
         this.drawHill(this.canvas.width * 0.7, this.canvas.height * 0.8, this.canvas.width * 0.4, this.canvas.height * 0.15);
 
         // Draw animated clouds
-        this.drawCloud(100, 100);
-        this.drawCloud(300, 80);
-        this.drawCloud(500, 120);
         this.drawSun(700, 100);
     }
 
@@ -170,15 +210,6 @@ class Garden {
         this.ctx.moveTo(x, y);
         this.ctx.quadraticCurveTo(x + width / 2, y - height * 2, x + width, y);
         this.ctx.closePath();
-        this.ctx.fill();
-    }
-
-    drawCloud(x, y) {
-        this.ctx.fillStyle = 'white';
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, 20, 0, Math.PI * 2);
-        this.ctx.arc(x + 20, y, 25, 0, Math.PI * 2);
-        this.ctx.arc(x + 40, y, 20, 0, Math.PI * 2);
         this.ctx.fill();
     }
 
