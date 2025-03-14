@@ -41,7 +41,7 @@ function animate() {
         if (flower.growing) {
             flower.height += 2; // Increase height
             flower.width += 0.5; // Increase width
-            if (flower.height >= 150) {
+            if (flower.height >= flower.maxHeight) {
                 flower.growing = false; // Stop growing after reaching a certain height
             }
         }
@@ -56,13 +56,19 @@ canvas.addEventListener('click', (event) => {
     const x = event.clientX - rect.left; // Get x position relative to canvas
     const y = event.clientY - rect.top; // Get y position relative to canvas
 
+    // Randomize flower size and color
+    const flowerSize = Math.random() * 15 + 10; // Random size between 10 and 25
+    const flowerColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random color
+
     // Add a new flower at the cursor position
     flowers.push({
         x: x,
         y: y,
         height: 0,
         width: 0,
-        growing: true
+        growing: true,
+        maxHeight: Math.random() * 100 + 100, // Random max height between 100 and 200
+        color: flowerColor
     });
 });
 
