@@ -11,6 +11,18 @@ class Flower {
         this.swayAngle = Math.random() * Math.PI * 2; // Initial sway angle
         this.swaySpeed = Math.random() * 0.02 + 0.01; // Sway speed
         this.swayAmplitude = Math.random() * 2; // Sway amplitude
+        this.leafNodes = [];
+        this.createLeafNodes();
+    }
+
+    createLeafNodes() {
+        const numLeaves = Math.floor(Math.random() * 3) + 2; // Random number of leaves (2-4)
+        for (let i = 0; i < numLeaves; i++) {
+            const position = Math.random() * this.maxHeight * 0.8; // Leaf position along the stem
+            const size = Math.random() * 5 + 5; // Leaf size
+            const angle = Math.random() * Math.PI / 4 - Math.PI / 8; // Leaf angle
+            this.leafNodes.push({ position, size, angle });
+        }
     }
 
     update() {
@@ -37,6 +49,18 @@ class Flower {
         stemGradient.addColorStop(1, '#228B22'); // Forest green
         ctx.fillStyle = stemGradient;
         ctx.fillRect(-5, 0, 10, -this.height);
+
+        // Draw leaves
+        this.leafNodes.forEach(leaf => {
+            ctx.save();
+            ctx.translate(0, -leaf.position);
+            ctx.rotate(leaf.angle);
+            ctx.fillStyle = '#388E3C'; // Darker green for leaves
+            ctx.beginPath();
+            ctx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
 
         // Draw petals with gradient and shadow
         const petalGradient = ctx.createRadialGradient(0, -this.height, this.width * 0.5, 0, -this.height, this.width);
