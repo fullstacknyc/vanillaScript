@@ -24,8 +24,12 @@ class Flower {
         ctx.fillStyle = '#228B22'; // Forest green for the stem
         ctx.fillRect(this.x - 5, this.y, 10, -this.height);
 
-        // Draw petals
-        ctx.fillStyle = this.color; // Use the selected color
+        // Draw petals with gradient
+        const petalGradient = ctx.createLinearGradient(this.x - this.width, this.y - this.height, this.x + this.width, this.y - this.height);
+        petalGradient.addColorStop(0, this.color);
+        petalGradient.addColorStop(1, '#FFFFFF'); // White highlight for petals
+        ctx.fillStyle = petalGradient;
+
         ctx.beginPath();
         ctx.ellipse(this.x, this.y - this.height, this.width, this.width * 0.6, Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
@@ -99,6 +103,27 @@ class Garden {
         gradient.addColorStop(1, '#B0E0E6'); // Light blue
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Optional: Draw clouds or sun (simple representation)
+        this.drawCloud(100, 100);
+        this.drawCloud(300, 80);
+        this.drawSun(700, 100);
+    }
+
+    drawCloud(x, y) {
+        this.ctx.fillStyle = 'white';
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, 20, 0, Math.PI * 2);
+        this.ctx.arc(x + 20, y, 25, 0, Math.PI * 2);
+        this.ctx.arc(x + 40, y, 20, 0, Math.PI * 2);
+        this.ctx.fill();
+    }
+
+    drawSun(x, y) {
+        this.ctx.fillStyle = 'yellow';
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, 30, 0, Math.PI * 2);
+        this.ctx.fill();
     }
 }
 
