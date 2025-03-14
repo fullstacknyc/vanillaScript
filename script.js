@@ -59,6 +59,7 @@ class Garden {
         this.animate();
     }
 
+    // Create: Add a new flower
     addFlower(event) {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left; // Get x position relative to canvas
@@ -66,6 +67,25 @@ class Garden {
         const flowerColor = this.colorPicker.value;
 
         this.flowers.push(new Flower(x, y, flowerColor));
+    }
+
+    // Read: Get all flowers
+    getFlowers() {
+        return this.flowers;
+    }
+
+    // Update: Update a specific flower's properties
+    updateFlower(index, newProperties) {
+        if (this.flowers[index]) {
+            Object.assign(this.flowers[index], newProperties);
+        }
+    }
+
+    // Delete: Remove a flower by index
+    deleteFlower(index) {
+        if (this.flowers[index]) {
+            this.flowers.splice(index, 1);
+        }
     }
 
     resizeCanvas() {
