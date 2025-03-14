@@ -44,6 +44,8 @@ class GameState {
         this.achievements = new Set();
         this.timeElapsed = 0;
         this.lastUpdate = performance.now();
+
+        
     }
 
     update() {
@@ -84,6 +86,8 @@ class GameState {
         const minutes = Math.floor(seconds / 60);
         return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
     }
+
+    
 }
 
 class NotificationManager {
@@ -472,6 +476,27 @@ class Garden {
         this.lastFrame = performance.now();
         this.frameCount = 0;
         this.fps = 0;
+        this.welcomeScreen = new WelcomeScreen(this);
+        this.gameStarted = false;
+    }
+
+    startGame() {
+        this.gameStarted = true;
+        this.gameState.lastUpdate = performance.now();
+        this.notifications.show('Start planting and pollinating!');
+    }
+
+    handleClick(event) {
+        if (!this.gameStarted || this.paused) return;
+        // ... rest of handleClick code ...
+    }
+
+    animate() {
+        if (!this.gameStarted) {
+            this.drawBackground();
+            requestAnimationFrame(() => this.animate());
+            return;
+        }
         this.init();
     }
 
@@ -682,6 +707,62 @@ class Garden {
     }
 }
 
+class WelcomeScreen {
+    constructor(garden) {
+        this.garden = garden;
+        this.container = document.createElement('div');
+        this.container.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            z-index: 2000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        `;
+
+        this.container.innerHTML = `
+            <h2>Welcome to the Interactive Rose Garden! 🌹</h2>
+            <p>Goals:</p>
+            <ul style="text-align: left;">
+                <li>Plant roses by clicking anywhere in the garden</li>
+                <li>Choose different colors from the palette in the top-left</li>
+                <li>Help bees pollinate flowers or click flowers to pollinate them yourself</li>
+                <li>Each fully pollinated flower gives you 10 points</li>
+                <li>Reach ${this.garden.gameState.targetScore} points to advance to the next level</li>
+                <li>Higher levels bring more bees to help you!</li>
+            </ul>
+            <p>Achievements to unlock:</p>
+            <ul style="text-align: left;">
+                <li>First Pollination - Pollinate your first flower</li>
+                <li>Garden Master - Pollinate 10 flowers</li>
+                <li>More achievements as you progress!</li>
+            </ul>
+            <button id="startGame" style="
+                padding: 10px 20px;
+                font-size: 16px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+            ">Start Gardening!</button>
+        `;
+
+        document.body.appendChild(this.container);
+
+        document.getElementById('startGame').onclick = () => {
+            this.container.style.display = 'none';
+            this.garden.startGame();
+        };
+    }
+}
 // Initialize the garden
 const canvas = document.getElementById('roseCanvas');
 const garden = new Garden(canvas);
