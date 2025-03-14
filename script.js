@@ -1,3 +1,38 @@
+class PollenParticle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.velocity = {
+            x: (Math.random() - 0.5) * 2,
+            y: -Math.random() * 2 - 1
+        };
+        this.alpha = 1;
+        this.size = Math.random() * 3 + 2;
+        this.lifetime = 60;
+        this.age = 0;
+    }
+
+    update() {
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.velocity.y += 0.05;
+        this.age++;
+        this.alpha = 1 - (this.age / this.lifetime);
+        return this.age < this.lifetime;
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
 class Flower {
     constructor(x, y, color) {
         this.x = x;
@@ -5,67 +40,97 @@ class Flower {
         this.height = 0;
         this.width = 0;
         this.growing = true;
-        this.maxHeight = Math.random() * 100 + 100; // Random max height between 100 and 200
+        this.maxHeight = Math.random() * 100 + 100;
         this.color = color;
-        this.petalVariation = Math.random() * 0.2 + 0.9; // Petal size variation
-        this.swayAngle = Math.random() * Math.PI * 2; // Initial sway angle
-        this.swaySpeed = Math.random() * 0.02 + 0.01; // Sway speed
-        this.swayAmplitude = Math.random() * 2; // Sway amplitude
+        this.petalVariation = Math.random() * 0.2 + 0.9;
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swaySpeed = Math.random() * 0.02 + 0.01;
+        this.swayAmplitude = Math.random() * 2;
         this.leafNodes = [];
+        this.isPollinated = false;
+        this.pollenCount = 0;
+        this.maxPollen = 3;
+        this.canBeePollinate = true;
+        this.pollenParticles = [];
+        this.lastPollinationTime = 0;
+        this.pollinationCooldown = 2000;
         this.createLeafNodes();
     }
 
     createLeafNodes() {
-        const numLeaves = Math.floor(Math.random() * 3) + 2; // Random number of leaves (2-4)
+        const numLeaves = Math.floor(Math.random() * 3) + 2;
         for (let i = 0; i < numLeaves; i++) {
-            const position = Math.random() * this.maxHeight * 0.8; // Leaf position along the stem
-            const size = Math.random() * 5 + 5; // Leaf size
-            const angle = Math.random() * Math.PI / 4 - Math.PI / 8; // Leaf angle
+            const position = Math.random() * this.maxHeight * 0.8;
+            const size = Math.random() * 5 + 5;
+            const angle = Math.random() * Math.PI / 4 - Math.PI / 8;
             this.leafNodes.push({ position, size, angle });
         }
     }
 
-    update() {
-        if (this.growing) {
-            this.height += 2; // Increase height
-            this.width += 0.5; // Increase width
-            if (this.height >= this.maxHeight) {
-                this.growing = false; // Stop growing after reaching a certain height
+    pollinate(currentTime) {
+        if (currentTime - this.lastPollinationTime < this.pollinationCooldown) {
+            return false;
+        }
+
+        if (this.pollenCount < this.maxPollen) {
+            this.pollenCount++;
+            this.lastPollinationTime = currentTime;
+            
+            for (let i = 0; i < 10; i++) {
+                this.pollenParticles.push(new PollenParticle(
+                    this.x,
+                    this.y - this.height,
+                    this.color
+                ));
+            }
+
+            if (this.pollenCount >= this.maxPollen) {
+                this.isPollinated = true;
+                this.width *= 1.2;
+                return true;
             }
         }
-        this.swayAngle += this.swaySpeed; // Update sway angle
+        return false;
+    }
+
+    update() {
+        if (this.growing) {
+            this.height += 2;
+            this.width += 0.5;
+            if (this.height >= this.maxHeight) {
+                this.growing = false;
+            }
+        }
+        this.swayAngle += this.swaySpeed;
+        this.pollenParticles = this.pollenParticles.filter(particle => particle.update());
     }
 
     draw(ctx) {
-        ctx.save(); // Save the current context state
+        ctx.save();
 
-        // Swaying animation
         ctx.translate(this.x + Math.sin(this.swayAngle) * this.swayAmplitude, this.y);
-        ctx.rotate(Math.sin(this.swayAngle) * 0.05); // Rotate the flower
+        ctx.rotate(Math.sin(this.swayAngle) * 0.05);
 
-        // Draw stem with a gradient
         const stemGradient = ctx.createLinearGradient(-5, 0, 5, -this.height);
-        stemGradient.addColorStop(0, '#4CAF50'); // Dark green
-        stemGradient.addColorStop(1, '#228B22'); // Forest green
+        stemGradient.addColorStop(0, '#4CAF50');
+        stemGradient.addColorStop(1, '#228B22');
         ctx.fillStyle = stemGradient;
         ctx.fillRect(-5, 0, 10, -this.height);
 
-        // Draw leaves
         this.leafNodes.forEach(leaf => {
             ctx.save();
-            ctx.translate(0, -this.height + leaf.position); // Corrected leaf position
+            ctx.translate(0, -this.height + leaf.position);
             ctx.rotate(leaf.angle);
-            ctx.fillStyle = '#388E3C'; // Darker green for leaves
+            ctx.fillStyle = '#388E3C';
             ctx.beginPath();
             ctx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
         });
 
-        // Draw petals with gradient and shadow
         const petalGradient = ctx.createRadialGradient(0, -this.height, this.width * 0.5, 0, -this.height, this.width);
         petalGradient.addColorStop(0, this.color);
-        petalGradient.addColorStop(1, '#FFFFFF'); // White highlight for petals
+        petalGradient.addColorStop(1, '#FFFFFF');
         ctx.fillStyle = petalGradient;
 
         ctx.beginPath();
@@ -76,13 +141,26 @@ class Flower {
         ctx.ellipse(0, -this.height, this.width * this.petalVariation, this.width * 0.6 * this.petalVariation, -Math.PI / 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw center of the rose with a shadow
-        ctx.fillStyle = '#FF69B4'; // Light pink color for the center
+        ctx.fillStyle = '#FF69B4';
         ctx.beginPath();
         ctx.arc(0, -this.height, this.width * 0.4, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.restore(); // Restore the context to the original state
+        this.pollenParticles.forEach(particle => particle.draw(ctx));
+
+        if (this.pollenCount > 0) {
+            ctx.save();
+            ctx.translate(0, -this.height);
+            for (let i = 0; i < this.pollenCount; i++) {
+                ctx.fillStyle = 'gold';
+                ctx.beginPath();
+                ctx.arc((i - 1) * 10, 20, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+
+        ctx.restore();
     }
 }
 
@@ -111,48 +189,58 @@ class Bee {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.speed = Math.random() * 1 + 0.5; // Random speed
-        this.angle = Math.random() * Math.PI * 2; // Random initial angle
-        this.flowerTarget = null; // The flower the bee is currently targeting
+        this.speed = Math.random() * 1 + 0.5;
+        this.angle = Math.random() * Math.PI * 2;
+        this.flowerTarget = null;
+        this.hasPollen = false;
+        this.pollinationCooldown = 0;
     }
 
-    update(flowers) {
-        // If the bee doesn't have a flower target, find one
-        if (!this.flowerTarget) {
-            this.flowerTarget = this.findClosestFlower(flowers);
+    update(flowers, currentTime) {
+        if (this.pollinationCooldown > 0) {
+            this.pollinationCooldown--;
         }
 
-        // If the bee has a flower target, move towards it
+        if (!this.flowerTarget && this.pollinationCooldown === 0) {
+            this.flowerTarget = this.findPollinationTarget(flowers);
+        }
+
         if (this.flowerTarget) {
             const dx = this.flowerTarget.x - this.x;
-            const dy = this.flowerTarget.y - this.y;
+            const dy = (this.flowerTarget.y - this.flowerTarget.height) - this.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            // If the bee is close enough to the flower, stop targeting it
             if (distance < 20) {
+                if (this.flowerTarget.pollinate(currentTime)) {
+                    this.pollinationCooldown = 60;
+                }
                 this.flowerTarget = null;
             } else {
-                // Move towards the flower
                 this.angle = Math.atan2(dy, dx);
                 this.x += Math.cos(this.angle) * this.speed;
                 this.y += Math.sin(this.angle) * this.speed;
             }
         } else {
-            // If the bee doesn't have a flower target, move randomly
             this.x += Math.cos(this.angle) * this.speed;
             this.y += Math.sin(this.angle) * this.speed;
 
-            // Change direction randomly
             if (Math.random() < 0.02) {
                 this.angle += (Math.random() - 0.5) * Math.PI * 0.5;
             }
         }
 
-        // Keep the bee within the bounds of the canvas
         if (this.x < 0) this.x = this.canvas.width;
         if (this.x > this.canvas.width) this.x = 0;
         if (this.y < 0) this.y = this.canvas.height;
         if (this.y > this.canvas.height) this.y = 0;
+    }
+
+    findPollinationTarget(flowers) {
+        return flowers.find(flower => 
+            !flower.isPollinated && 
+            flower.pollenCount < flower.maxPollen &&
+            flower.canBeePollinate
+        );
     }
 
     draw(ctx) {
@@ -166,24 +254,6 @@ class Bee {
         ctx.arc(this.x + 2, this.y - 3, 1, 0, Math.PI * 2);
         ctx.fill();
     }
-
-    findClosestFlower(flowers) {
-        let closestFlower = null;
-        let closestDistance = Infinity;
-
-        for (const flower of flowers) {
-            const dx = flower.x - this.x;
-            const dy = flower.y - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestFlower = flower;
-            }
-        }
-
-        return closestFlower;
-    }
 }
 
 class Garden {
@@ -191,25 +261,46 @@ class Garden {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.flowers = [];
-        this.currentColor = '#FF1493'; // Default color
-        this.clouds = []; // Array to hold clouds
-        this.bees = []; // Array to hold bees
+        this.currentColor = '#FF1493';
+        this.clouds = [];
+        this.bees = [];
+        this.score = 0;
+        this.lastUpdateTime = Date.now();
         this.init();
     }
 
     init() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.canvas.addEventListener('click', (event) => this.addFlower(event));
+        this.canvas.addEventListener('click', (event) => this.handleClick(event));
         window.addEventListener('resize', () => this.resizeCanvas());
         this.setupColorPalette();
-        this.createClouds(); // Create initial clouds
-        this.createBees(); // Create initial bees
+        this.createClouds();
+        this.createBees();
         this.animate();
     }
 
+    handleClick(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const clickedFlower = this.flowers.find(flower => {
+            const dx = flower.x - x;
+            const dy = (flower.y - flower.height) - y;
+            return Math.sqrt(dx * dx + dy * dy) < 30;
+        });
+
+        if (clickedFlower) {
+            if (clickedFlower.pollinate(Date.now())) {
+                this.score += 10;
+            }
+        } else {
+            this.addFlower(event);
+        }
+    }
+
     createClouds() {
-        // Create multiple clouds with random positions and speeds
         for (let i = 0; i < 3; i++) {
             const x = Math.random() * this.canvas.width;
             const y = Math.random() * this.canvas.height * 0.3;
@@ -219,7 +310,6 @@ class Garden {
     }
 
     createBees() {
-        // Create multiple bees with random positions
         for (let i = 0; i < 5; i++) {
             const x = Math.random() * this.canvas.width;
             const y = Math.random() * this.canvas.height * 0.8;
@@ -236,12 +326,10 @@ class Garden {
         });
     }
 
-    // Create: Add a new flower
     addFlower(event) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left; // Get x position relative to canvas
-        const y = event.clientY - rect.top; // Get y position relative to canvas
-
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
         this.flowers.push(new Flower(x, y, this.currentColor));
     }
 
@@ -251,53 +339,50 @@ class Garden {
     }
 
     animate() {
+        const currentTime = Date.now();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawBackground();
         
-        // Update and draw clouds
         this.clouds.forEach(cloud => {
             cloud.update();
-            if (cloud.x < -50) { // If cloud is off-screen
-                cloud.x = this.canvas.width + 50; // Reset to right side
-                cloud.y = Math.random() * this.canvas.height * 0.3; // New random y position
+            if (cloud.x < -50) {
+                cloud.x = this.canvas.width + 50;
+                cloud.y = Math.random() * this.canvas.height * 0.3;
             }
             cloud.draw(this.ctx);
         });
 
-        // Update and draw bees
         this.bees.forEach(bee => {
             bee.canvas = this.canvas;
-            bee.update(this.flowers);
+            bee.update(this.flowers, currentTime);
             bee.draw(this.ctx);
         });
 
-        // Only update and draw growing flowers
         this.flowers.forEach(flower => {
             flower.update();
             flower.draw(this.ctx);
         });
-        
-        this.flowers = this.flowers.filter(flower => flower.growing || flower.height < flower.maxHeight); // Keep flowers in array if they are still growing or haven't reached max height
+
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = '20px Arial';
+        this.ctx.fillText(`Score: ${this.score}`, 10, 30);
 
         requestAnimationFrame(() => this.animate());
     }
 
     drawBackground() {
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, '#87CEEB'); // Sky blue
-        gradient.addColorStop(1, '#B0E0E6'); // Light blue
+        gradient.addColorStop(0, '#87CEEB');
+        gradient.addColorStop(1, '#B0E0E6');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw ground
-        this.ctx.fillStyle = '#6B8E23'; // Olive drab
+        this.ctx.fillStyle = '#6B8E23';
         this.ctx.fillRect(0, this.canvas.height * 0.8, this.canvas.width, this.canvas.height * 0.2);
 
-        // Draw hills
         this.drawHill(this.canvas.width * 0.2, this.canvas.height * 0.8, this.canvas.width * 0.3, this.canvas.height * 0.1);
         this.drawHill(this.canvas.width * 0.7, this.canvas.height * 0.8, this.canvas.width * 0.4, this.canvas.height * 0.15);
 
-        // Draw animated clouds
         this.drawSun(700, 100);
     }
 
@@ -314,7 +399,7 @@ class Garden {
         this.ctx.fillStyle = 'yellow';
         this.ctx.beginPath();
         this.ctx.arc(x, y, 30, 0, Math.PI * 2);
-        this.ctx.fill();
+        ctx.fill();
     }
 }
 
