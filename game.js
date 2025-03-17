@@ -7,7 +7,7 @@ let player = {
     x: 50,
     y: 50,
     size: 30,
-    speed: 5
+    speed: 20
 };
 
 // Keyboard Controls
