@@ -1,85 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Interactive 3D Garden</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-        #colorPalette { position: absolute; top: 10px; left: 10px; z-index: 1; }
-        .colorOption { width: 30px; height: 30px; border: 2px solid white; cursor: pointer; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria's Garden</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="flower-icon-png.png" type="image/x-icon">
 </head>
 <body>
-    <div id="colorPalette">
-        <div class="colorOption" style="background-color: #FF1493;" data-color="#FF1493"></div>
-        <div class="colorOption" style="background-color: #FFD700;" data-color="#FFD700"></div>
-        <div class="colorOption" style="background-color: #ADFF2F;" data-color="#ADFF2F"></div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js"></script>
-    <script>
-        // Scene setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-        renderer.shadowMap.enabled = true; // Enable shadow mapping
-
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(1, 1, 1);
-        directionalLight.castShadow = true; // Enable shadow casting
-        scene.add(directionalLight);
-
-        // Camera position
-        camera.position.z = 5;
-
-        // Ground
-        const groundGeometry = new THREE.PlaneGeometry(10, 10, 10, 10);
-        const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x355E3B });
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true; // Enable shadow receiving
-        scene.add(ground);
-
-        // Flowers
-        const flowers = [];
-        let currentColor = '#FF1493';
-
-        function createFlower(x, y, z, color) {
-            const flowerGeometry = new THREE.ConeGeometry(0.2, 0.5, 32);
-            const flowerMaterial = new THREE.MeshLambertMaterial({ color: color });
-            const flower = new THREE.Mesh(flowerGeometry, flowerMaterial);
-            flower.position.set(x, y, z);
-            flower.castShadow = true; // Enable shadow casting
-            scene.add(flower);
-            flowers.push(flower);
-        }
-
-        // Event Listeners
-        document.addEventListener('click', (event) => {
-            const x = (event.clientX / window.innerWidth) * 10 - 5;
-            const y = 0;
-            const z = (event.clientY / window.innerHeight) * 10 - 5;
-            createFlower(x, 0.25, z, currentColor);
-        });
-
-        document.querySelectorAll('.colorOption').forEach(option => {
-            option.addEventListener('click', (event) => {
-                currentColor = event.target.dataset.color;
-            });
-        });
-
-        // Animation
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-
-        animate();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
