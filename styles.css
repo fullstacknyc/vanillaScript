@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .container {
+    text-align: center;
+  }
+  
+  .animation-box {
+    width: 100px;
+    height: 100px;
+    background-color: #3498db;
+    margin: 20px auto;
+    transition: transform 2s ease;
+  }
+  
+  .controls {
+    margin-top: 20px;
+  }
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  input[type="range"], select {
+    margin-bottom: 20px;
+    width: 80%;
+    max-width: 300px;
+  }
+  
