@@ -1,29 +1,20 @@
-// Setup
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById(`gameCanvas`);
+const ctx = canvas.getContext(`2d`);
 
-// Player (a simple box)
-let player = {
-    x: 50,
-    y: 50,
-    size: 30,
-    speed: 20
-};
+let creatures = [
+    {x: 100, y: 100, speedX: 2, speedY: 1, color: `red`},
+    {x: 200, y: 200, speedX: -1, speedY: 2, color: `blue`}
+];
 
-// Keyboard Controls
-document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowRight") player.x += player.speed;
-    if (event.key === "ArrowLeft") player.x -= player.speed;
-    if (event.key === "ArrowUp") player.y -= player.speed;
-    if (event.key === "ArrowDown") player.y += player.speed;
+creatures.forEach(creature => {
+    creature.x += creature.speedX;
+    creature.y += creature.speedY;
 });
 
-// Game Loop
-function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear screen
-    ctx.fillStyle = "red";
-    ctx.fillRect(player.x, player.y, player.size, player.size); // Draw player
-    requestAnimationFrame(gameLoop); // Repeat
-}
+if (creature.x < 0 || creature.x > canvas.width) creature.speedX *= -1;
+if (creature.y < 0 || creature.y > canvas.height) creature.speedY *= -1;
 
-gameLoop(); // Start the game
+ctx.fillStyle = creature.color;
+ctx.beginPath();
+ctx.arc(creature.x, creature.y, 10, 0, Math.PI * 2);
+ctx.fill();
