@@ -8,8 +8,8 @@
 /* Body Styles */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: black;
-  color: white;
+  background-color: #1e1e1e; /* Dark background */
+  color: #f4f4f4; /* Light text color */
   line-height: 1.6;
   padding: 20px;
 }
@@ -18,20 +18,20 @@ body {
 h1 {
   font-size: 3em;
   text-align: center;
-  color: #2c3e50;
+  color: #ecf0f1; /* Light color for the header */
   margin-bottom: 20px;
 }
 
 h2 {
   font-size: 2em;
   margin-top: 30px;
-  color: #2c3e50;
+  color: #ecf0f1; /* Light color for the subheaders */
 }
 
 /* Paragraph Styles */
 p {
   font-size: 1.1em;
-  color: #555;
+  color: #dcdcdc; /* Slightly lighter text color */
   margin-bottom: 20px;
   text-align: center;
 }
@@ -44,7 +44,7 @@ ul {
 
 li {
   font-size: 1.1em;
-  color: #444;
+  color: #bdc3c7; /* Lighter color for list items */
   margin: 10px 0;
 }
 
@@ -61,17 +61,18 @@ ul ul {
 ul ul li {
   font-weight: normal;
   font-size: 1em;
-  color: #555;
+  color: #95a5a6; /* Even lighter color for nested lists */
 }
 
 /* Link Styles */
 a {
   text-decoration: none;
-  color: #3498db;
+  color: #3498db; /* Blue color for links */
 }
 
 a:hover {
   text-decoration: underline;
+  color: #2980b9; /* Darker blue on hover */
 }
 
 /* Container for the main content */
@@ -79,8 +80,8 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #2c3e50; /* Dark background for content */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Darker shadow */
   border-radius: 8px;
 }
 
@@ -94,7 +95,7 @@ nav {
 
 nav a {
   font-size: 1.2em;
-  color: #333;
+  color: #ecf0f1; /* Light text color for links in the nav */
   padding: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
@@ -109,35 +110,35 @@ nav a:hover {
 footer {
   text-align: center;
   font-size: 0.9em;
-  color: #777;
+  color: #bdc3c7; /* Lighter color for footer */
   margin-top: 40px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   body {
-      padding: 10px;
+    padding: 10px;
   }
 
   h1 {
-      font-size: 2.5em;
+    font-size: 2.5em;
   }
 
   h2 {
-      font-size: 1.8em;
+    font-size: 1.8em;
   }
 
   li {
-      font-size: 1em;
+    font-size: 1em;
   }
 
   .container {
-      padding: 10px;
+    padding: 10px;
   }
 
   nav {
-      flex-direction: column;
-      align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
 }
 
