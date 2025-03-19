@@ -55,7 +55,7 @@
   }
   
   /* Styling for links */
-section h2 a {
+body section h2 a {
   text-decoration: none; /* Remove underline */
   color: white; /* Change text color */
   background-color: #007BFF; /* Background color */
@@ -66,12 +66,12 @@ section h2 a {
 }
 
 /* Hover effect */
-section h2 a:hover {
+body section h2 a:hover {
   background-color: #0056b3; /* Darker shade on hover */
 }
 
 /* Prevent visited links from turning purple */
-section h2 a:visited {
+body section h2 a:visited {
   color: white; /* Keep the color the same as unvisited links */
 }
 
