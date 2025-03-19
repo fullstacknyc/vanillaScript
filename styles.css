@@ -11,105 +11,57 @@ body {
   background-color: #1e1e1e; /* Dark background */
   color: #f4f4f4; /* Light text color */
   line-height: 1.6;
-  padding: 20px;
+  overflow: hidden;
 }
 
-/* Header Styles */
-header {
-  text-align: center;
-  margin-bottom: 20px;
+/* Full-height Section Styles */
+.sections-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Take up full height of the viewport */
+  overflow: hidden;
 }
 
-h1 {
-  font-size: 3em;
-  color: #ecf0f1; /* Light color for the header */
-  margin-bottom: 20px;
+.section {
+  height: 100vh; /* Each section takes up the full viewport height */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-/* Section Styles */
-section {
-  margin-bottom: 40px;
+#section-1 {
+  background-color: #2c3e50; /* Dark background for section 1 */
 }
 
-/* Paragraph Styles */
-p {
-  font-size: 1.1em;
-  color: #dcdcdc; /* Slightly lighter text color */
-  margin-bottom: 20px;
-  text-align: center;
+#section-2 {
+  background-color: #34495e; /* Darker background for section 2 */
 }
 
-/* List Styles */
-ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-li {
-  font-size: 1.1em;
-  color: #bdc3c7; /* Lighter color for list items */
-  margin: 10px 0;
-}
-
-ul > li {
-  font-weight: bold;
-  margin-top: 15px;
-}
-
-/* Nested List Styling */
-ul ul {
-  margin-left: 20px;
-}
-
-ul ul li {
-  font-weight: normal;
-  font-size: 1em;
-  color: #95a5a6; /* Even lighter color for nested lists */
-}
-
-/* Outcome Section */
-.outcome {
-  text-align: center;
-}
-
-h2 {
-  font-size: 2em;
-  color: #ecf0f1; /* Light color for the subheaders */
-}
-
-/* Footer Styles */
+/* Footer */
 footer {
   text-align: center;
   font-size: 0.9em;
   color: #bdc3c7; /* Lighter color for footer */
-  margin-top: 40px;
+  margin-top: 20px;
+}
+
+/* Ensure Sections are centered */
+h1, h2, p, ul {
+  text-align: center;
+  color: #ecf0f1; /* Light color for text */
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  display: none; /* Hide default scrollbar */
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   body {
-    padding: 10px;
+      padding: 10px;
   }
-
-  h1 {
-    font-size: 2.5em;
-  }
-
-  h2 {
-    font-size: 1.8em;
-  }
-
-  li {
-    font-size: 1em;
-  }
-
-  section {
-    padding: 10px;
-  }
-}
-
-/* Icon Style */
-link[rel="icon"] {
-  width: 32px;
-  height: 32px;
 }
