@@ -54,6 +54,27 @@
     color: #555; /* Slightly lighter text color */
   }
   
+  /* Styling for links */
+section h2 a {
+  text-decoration: none; /* Remove underline */
+  color: white; /* Change text color */
+  background-color: #007BFF; /* Background color */
+  padding: 10px 15px; /* Add padding */
+  border-radius: 5px; /* Rounded corners */
+  display: inline-block; /* Ensure padding applies properly */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover effect */
+section h2 a:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Prevent visited links from turning purple */
+section h2 a:visited {
+  color: white; /* Keep the color the same as unvisited links */
+}
+
   /* Footer Styling */
   footer {
     height: 100vh;
