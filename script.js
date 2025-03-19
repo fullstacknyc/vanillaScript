@@ -10,7 +10,7 @@ function scrollToSection(index) {
   sections[index].scrollIntoView({ behavior: "smooth" });
 }
 
-// Handle scroll event
+// Handle scroll event for PC
 function handleScroll(event) {
   if (event.deltaY > 0 && currentSectionIndex < sections.length - 1) {
     // Scroll down
@@ -22,5 +22,29 @@ function handleScroll(event) {
   scrollToSection(currentSectionIndex);
 }
 
-// Add event listener for scrolling
-window.addEventListener("wheel", handleScroll);
+// Handle touch events for mobile
+let startY = 0;
+
+function handleTouchStart(event) {
+  startY = event.touches[0].clientY;
+}
+
+function handleTouchMove(event) {
+  const endY = event.touches[0].clientY;
+  const deltaY = startY - endY;
+
+  if (deltaY > 50 && currentSectionIndex < sections.length - 1) {
+    // Swipe up
+    currentSectionIndex++;
+    scrollToSection(currentSectionIndex);
+  } else if (deltaY < -50 && currentSectionIndex > 0) {
+    // Swipe down
+    currentSectionIndex--;
+    scrollToSection(currentSectionIndex);
+  }
+}
+
+// Add event listeners for scrolling and touch
+window.addEventListener("wheel", handleScroll, { passive: true });
+window.addEventListener("touchstart", handleTouchStart, { passive: true });
+window.addEventListener("touchmove", handleTouchMove, { passive: true });

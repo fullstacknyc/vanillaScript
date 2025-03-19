@@ -84,4 +84,8 @@
     ul {
       padding: 0 10px;
     }
+  
+    section {
+      padding: 10px; /* Reduce padding for smaller screens */
+    }
   }
