@@ -4,6 +4,9 @@ let currentSectionIndex = 0;
 
 // Function to scroll to a specific section
 function scrollToSection(index) {
+  if (sections.length === 0) return; // Ensure there are sections to scroll to
+  if (index < 0 || index >= sections.length) return; // Prevent out-of-bounds access
+
   sections[index].scrollIntoView({ behavior: "smooth" });
 }
 
