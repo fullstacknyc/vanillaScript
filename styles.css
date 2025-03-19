@@ -1,0 +1,54 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent default scrolling */
+  }
+  
+  section {
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    scroll-snap-align: start; /* Snap to the start of each section */
+    scroll-snap-stop: always;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 0.5rem 0;
+  }
+  
+  /* Add different background colors for each section for better visibility */
+  section:nth-child(odd) {
+    background-color: #f0f0f0;
+  }
+  
+  section:nth-child(even) {
+    background-color: #d0d0d0;
+  }
+  
+  footer {
+    height: 100vh;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
