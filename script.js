@@ -1,6 +1,8 @@
 // Select all sections
 const sections = document.querySelectorAll("section");
 let currentSectionIndex = 0;
+let lastScrollTime = 0;
+const scrollThreshold = 100; // Adjust this value to control sensitivity
 
 // Function to scroll to a specific section
 function scrollToSection(index) {
@@ -12,10 +14,14 @@ function scrollToSection(index) {
 
 // Handle scroll event for PC
 function handleScroll(event) {
-  if (event.deltaY > 0 && currentSectionIndex < sections.length - 1) {
+  const now = Date.now();
+  if (now - lastScrollTime < scrollThreshold) return; // Limit scrolling speed
+  lastScrollTime = now;
+
+  if (event.deltaY > 50 && currentSectionIndex < sections.length - 1) {
     // Scroll down
     currentSectionIndex++;
-  } else if (event.deltaY < 0 && currentSectionIndex > 0) {
+  } else if (event.deltaY < -50 && currentSectionIndex > 0) {
     // Scroll up
     currentSectionIndex--;
   }
@@ -33,15 +39,16 @@ function handleTouchMove(event) {
   const endY = event.touches[0].clientY;
   const deltaY = startY - endY;
 
+  if (Math.abs(deltaY) < 50) return; // Reduce sensitivity by requiring more movement
+
   if (deltaY > 50 && currentSectionIndex < sections.length - 1) {
     // Swipe up
     currentSectionIndex++;
-    scrollToSection(currentSectionIndex);
   } else if (deltaY < -50 && currentSectionIndex > 0) {
     // Swipe down
     currentSectionIndex--;
-    scrollToSection(currentSectionIndex);
   }
+  scrollToSection(currentSectionIndex);
 }
 
 // Add event listeners for scrolling and touch
