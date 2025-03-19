@@ -11,34 +11,31 @@ body {
   background-color: #1e1e1e; /* Dark background */
   color: #f4f4f4; /* Light text color */
   line-height: 1.6;
-  overflow: hidden;
+  overflow: auto; /* Allow scrolling */
 }
 
 /* Full-height Section Styles */
-.sections-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Take up full height of the viewport */
-  overflow: hidden;
-}
-
 .section {
-  height: 100vh; /* Each section takes up the full viewport height */
+  min-height: 100vh; /* Ensure each section at least takes up the full viewport height */
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-#section-1 {
-  background-color: #2c3e50; /* Dark background for section 1 */
+/* Styling each section background color */
+#intro-software-engineering {
+  background-color: #2c3e50;
 }
 
-#section-2 {
-  background-color: #34495e; /* Darker background for section 2 */
+#intro-html-css-js {
+  background-color: #34495e;
 }
+
+/* Additional section background colors can be applied similarly */
 
 /* Footer */
 footer {
