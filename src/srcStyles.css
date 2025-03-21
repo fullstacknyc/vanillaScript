@@ -1,74 +1,92 @@
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #2ecc71;
+    --font-size-base: 16px;
+    --background-color: #1a1a1a;
+    --text-color: #f0f0f0;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #1a1a1a;
-    color: #f0f0f0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: var(--font-size-base);
     line-height: 1.6;
 }
 
 h1 {
     text-align: center;
-    color: #4CAF50;
-    border-bottom: 2px solid #4CAF50;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
     padding-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-ul {
-    padding-left: 20px;
+.main-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
-li {
-    margin-bottom: 10px;
+.main-list li {
+    margin: 10px;
+    flex-basis: 45%;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-li > ul {
+.main-list li ul {
     margin-top: 10px;
 }
 
-li > ul > li {
+.main-list li ul li {
+    margin-bottom: 10px;
     color: #bbb;
 }
 
-li > ul > li > ul {
+.main-list li ul li ul {
     margin-top: 5px;
 }
 
-li > ul > li > ul > li {
+.main-list li ul li ul li {
     color: #999;
     font-size: 0.95em;
 }
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    
-    h1 {
-        font-size: 1.5em;
-    }
-    
-    li > ul > li > ul > li {
-        font-size: 0.9em;
-    }
-}
-ul {
-    list-style-type: none;
+
+li:hover {
+    background-color: #2a2a2a;
+    transition: background-color 0.3s ease;
 }
 
 li::before {
     content: "•";
-    color: #4CAF50;
+    color: var(--primary-color);
     display: inline-block;
     width: 1em;
     margin-left: -1em;
 }
 
-li > ul > li::before {
+.main-list li ul li::before {
     content: "◦";
     color: #bbb;
 }
 
-li > ul > li > ul > li::before {
+.main-list li ul li ul li::before {
     content: "▪";
     color: #999;
+}
+
+@media (max-width: 768px) {
+    .main-list {
+        flex-direction: column;
+    }
+    
+    .main-list li {
+        flex-basis: 100%;
+        margin-bottom: 20px;
+    }
 }
