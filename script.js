@@ -20,14 +20,21 @@ document.addEventListener('DOMContentLoaded', function () {
         currentPosition -= 1; // Move left by 1px
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // If the first box has completely moved off the screen
         const firstBoxWidth = boxes[0].offsetWidth + 20; // box width + margin
+        const containerWidth = container.offsetWidth;
+
+        // Check if the first box is about to leave the viewport
         if (Math.abs(currentPosition) >= firstBoxWidth) {
-            // Move the first box to the end without jumpiness
+            // Move the first box to the end just before it goes out of view
             const firstBox = container.firstElementChild;
             container.appendChild(firstBox); // Move first box to the end
+            
+            // Spawn a new box just off-screen (to the right side)
+            const newBox = firstBox.cloneNode(true);
+            newBox.style.transform = `translateX(${containerWidth}px)`; // Position it off-screen to the right
+            container.appendChild(newBox);
 
-            // Reset the current position immediately
+            // Reset the current position without jump
             currentPosition = 0;
         }
     }
