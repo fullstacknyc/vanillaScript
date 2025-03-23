@@ -1,24 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.tech-boxes-container');
-    const techBoxes = document.querySelectorAll('.tech-box');
-    
-    // Duplicate the items to ensure infinite scrolling
-    techBoxes.forEach(box => {
-        const clone = box.cloneNode(true);
-        container.appendChild(clone);
-    });
+    const techBoxTemplate = document.querySelector('.tech-box'); // Get a reference to one tech-box
 
-    const updateContainerWidth = () => {
-        const boxWidth = techBoxes[0].offsetWidth; // Get the width of a single box
-        const containerWidth = techBoxes.length * boxWidth + (techBoxes.length - 1) * 20; // Total width of all items and gaps
-        container.style.width = `${containerWidth}px`; // Set the width dynamically based on content
-    };
+    // Function to calculate how many boxes should be displayed based on the viewport width
+    function updateBoxes() {
+        // Clear the container to reset
+        container.innerHTML = '';
 
-    // Initial update of container width
-    updateContainerWidth();
+        const containerWidth = container.offsetWidth;
+        const boxWidth = techBoxTemplate.offsetWidth + 20; // width of one box + margin-right
 
-    // Adjust width dynamically when window is resized
-    window.addEventListener('resize', updateContainerWidth);
+        // Calculate how many boxes can fit in the viewport
+        const boxesToFit = Math.ceil(containerWidth / boxWidth);
+
+        // Add boxes dynamically
+        for (let i = 0; i < boxesToFit * 2; i++) { // Multiply by 2 to create a seamless loop
+            const clone = techBoxTemplate.cloneNode(true);
+            container.appendChild(clone);
+        }
+    }
+
+    // Initial update of boxes
+    updateBoxes();
+
+    // Recalculate when the window is resized
+    window.addEventListener('resize', updateBoxes);
 
     const totalWidth = container.scrollWidth; // The total width of the container
 
