@@ -3,33 +3,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const boxes = Array.from(container.children);
     let currentPosition = 0;
 
-    // Function to fill the container with enough boxes to fill the width
+    // Function to ensure enough boxes are in the container
     function fillContainer() {
         const containerWidth = container.offsetWidth;
         const boxWidth = boxes[0].offsetWidth + 20; // width of one box + margin
         const numOfBoxesRequired = Math.ceil(containerWidth / boxWidth); // Calculate how many boxes are needed
 
-        // Duplicate boxes to fill the width of the container
+        // Duplicate boxes to fill the width of the container if necessary
         while (container.children.length < numOfBoxesRequired) {
             boxes.forEach(box => container.appendChild(box.cloneNode(true)));
         }
     }
 
-    // Function to move the container smoothly
+    // Function to move the container continuously
     function moveContainer() {
         currentPosition -= 1; // Move left by 1px
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // If the first box has gone out of view, move it to the end without a jump
-        if (Math.abs(currentPosition) >= boxes[0].offsetWidth) {
-            // Move the first box to the end without jump
-            container.appendChild(container.firstElementChild); 
-            currentPosition = 0; // Reset position smoothly without visible jump
+        // If the first box has completely moved off the screen
+        const firstBoxWidth = boxes[0].offsetWidth + 20; // box width + margin
+        if (Math.abs(currentPosition) >= firstBoxWidth) {
+            // Move the first box to the end without jumpiness
+            container.appendChild(container.firstElementChild); // Move first box to the end
+            currentPosition = 0; // Reset position without jump
         }
     }
 
-    // Initialize and make the container scroll continuously
-    fillContainer(); // Ensure enough items are present to fill the container
+    // Fill the container initially and make the container scroll continuously
+    fillContainer();
     setInterval(moveContainer, 10); // Move the container every 10ms for smooth scrolling
 
     // Recalculate the number of boxes if the window resizes
