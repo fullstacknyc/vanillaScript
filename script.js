@@ -28,11 +28,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // Move the first box to the end just before it goes out of view
             const firstBox = container.firstElementChild;
             container.appendChild(firstBox); // Move first box to the end
-            
-            // Spawn a new box just off-screen (to the right side)
-            const newBox = firstBox.cloneNode(true);
-            newBox.style.transform = `translateX(${containerWidth}px)`; // Position it off-screen to the right
-            container.appendChild(newBox);
+
+            // Add a new box only if the rightmost one is out of view
+            if (container.children.length < 2 * boxes.length) { // Only add if not enough boxes
+                const newBox = boxes[0].cloneNode(true); // Clone the first box
+                newBox.style.transform = `translateX(${containerWidth}px)`; // Position it off-screen to the right
+                container.appendChild(newBox);
+            }
 
             // Reset the current position without jump
             currentPosition = 0;
