@@ -58,10 +58,26 @@ h1, h2 {
 .tech-boxes-container {
     display: flex;
     animation: slideLeft 15s linear infinite;
-    width: 100%; /* Ensure container is full width */
-    min-width: 50%; /* You can play with this value to see if it fixes layout issues */
+    width: max-content; /* Ensures that the container adjusts to the total width of all the tech boxes */
 }
 
+@keyframes slideLeft {
+    0% {
+        transform: translateX(0%);
+    }
+    25% {
+        transform: translateX(-25%); /* Adjust this value according to your layout */
+    }
+    50% {
+        transform: translateX(-50%);
+    }
+    75% {
+        transform: translateX(-75%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 
 .tech-box {
     flex-shrink: 0;
@@ -79,21 +95,6 @@ h1, h2 {
 
 .tech-box:hover {
     transform: translateY(-5px);
-}
-
-@keyframes slideLeft {
-    0% {
-        transform: translateX(100%);
-    }
-    25% {
-        transform: translateX(0%);
-    }
-    75% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(-200%);
-    }
 }
 
 button {
