@@ -56,6 +56,7 @@ h1, h2 {
 .tech-boxes-container {
     display: flex;
     animation: slideLeft 15s linear infinite; /* Apply the animation */
+    white-space: nowrap; /* Prevent wrapping to a new line */
 }
 
 /* Each individual tech box */
@@ -111,16 +112,14 @@ footer {
 
 /* Responsiveness */
 @media (max-width: 768px) {
-    .tech-boxes-container {
-        flex-direction: column;
-        align-items: center;
-    }
     .tech-box {
-        width: 80%;  /* Adjust the width for smaller screens */
-        margin-bottom: 10px;
+        width: 160px;  /* Adjust the width for smaller screens */
+        margin-right: 10px;
     }
+}
 
-    nav ul {
-        flex-direction: column;
+@media (max-width: 480px) {
+    .tech-box {
+        width: 140px;  /* Adjust the width even further on very small screens */
     }
 }
