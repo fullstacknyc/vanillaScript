@@ -3,15 +3,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const boxes = Array.from(container.children);
     let currentPosition = 0;
 
-    // Function to ensure enough boxes are in the container
-    function fillContainer() {
-        const containerWidth = container.offsetWidth;
-        const boxWidth = boxes[0].offsetWidth + 20; // width of one box + margin
-        const numOfBoxesRequired = Math.ceil(containerWidth / boxWidth); // Calculate how many boxes are needed
+    // Cache the box width + margin, to avoid recalculating repeatedly
+    const boxWidth = boxes[0].offsetWidth + 20; // width of one box + margin
+    const containerWidth = container.offsetWidth;
 
-        // Duplicate boxes to fill the width of the container if necessary
-        while (container.children.length < numOfBoxesRequired) {
-            boxes.forEach(box => container.appendChild(box.cloneNode(true)));
+    // Calculate number of boxes that should be in the container based on initial size
+    let requiredBoxes = Math.ceil(containerWidth / boxWidth);
+
+    // Ensure the container is filled with the necessary number of boxes
+    function fillContainer() {
+        const currentBoxCount = container.children.length;
+        if (currentBoxCount < requiredBoxes) {
+            const boxesToAdd = requiredBoxes - currentBoxCount;
+            for (let i = 0; i < boxesToAdd; i++) {
+                boxes.forEach(box => container.appendChild(box.cloneNode(true)));
+            }
         }
     }
 
@@ -20,10 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
         currentPosition -= 1; // Move left by 1px
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        const firstBoxWidth = boxes[0].offsetWidth + 20; // box width + margin
-
         // If the first box has completely moved off the screen
-        if (Math.abs(currentPosition) >= firstBoxWidth) {
+        if (Math.abs(currentPosition) >= boxWidth) {
             // Move the first box to the end just before it goes out of view
             const firstBox = container.firstElementChild;
             container.appendChild(firstBox); // Move first box to the end
@@ -36,10 +40,17 @@ document.addEventListener('DOMContentLoaded', function () {
         requestAnimationFrame(moveContainer);
     }
 
-    // Initialize and start moving the container
+    // Initial setup: fill the container and start the scrolling
     fillContainer();
-    moveContainer(); // Start moving the container
+    moveContainer();
 
-    // Recalculate the number of boxes if the window resizes
-    window.addEventListener('resize', fillContainer);
+    // Recalculate the number of boxes when window is resized
+    window.addEventListener('resize', () => {
+        const newContainerWidth = container.offsetWidth;
+        const newBoxCount = Math.ceil(newContainerWidth / boxWidth);
+        if (newBoxCount !== requiredBoxes) {
+            requiredBoxes = newBoxCount;
+            fillContainer();
+        }
+    });
 });
