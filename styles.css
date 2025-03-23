@@ -58,8 +58,10 @@ h1, h2 {
 .tech-boxes-container {
     display: flex;
     animation: slideLeft 15s linear infinite;
-    width: 100%;
+    width: 100%; /* Ensure container is full width */
+    min-width: 1000px; /* You can play with this value to see if it fixes layout issues */
 }
+
 
 .tech-box {
     flex-shrink: 0;
