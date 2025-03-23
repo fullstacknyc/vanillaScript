@@ -1,126 +1,32 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-    line-height: 1.6;
-}
+body { font-family: Arial, sans-serif; background: #f4f4f9; color: #333; line-height: 1.6; }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+header { background: black; color: white; text-align: center; padding: 20px 0; }
 
-header {
-    background-color: black;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
+nav ul { display: flex; justify-content: center; gap: 20px; list-style: none; }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
+h1, h2 { margin-bottom: 20px; }
 
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
+.intro { text-align: center; padding: 40px 0; }
 
-h1, h2 {
-    margin-bottom: 20px;
-}
+.tech-boxes-wrapper { overflow: hidden; margin-top: 20px; }
 
-.intro {
-    padding: 40px 0;
-    text-align: center;
-}
+.tech-boxes-container { display: flex; animation: slideLeft 15s linear infinite; }
 
-/* Container for the infinite scrolling effect */
-.tech-boxes-wrapper {
-    width: 100%;
-    overflow: hidden; /* Hide the overflow */
-    margin-top: 20px;
-}
+.tech-box { flex-shrink: 0; width: 200px; margin-right: 20px; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
 
-.tech-boxes-container {
-    display: flex;
-    animation: slideLeft 15s linear infinite; /* Apply the animation */
-    white-space: nowrap; /* Prevent wrapping to a new line */
-}
-
-/* Each individual tech box */
-.tech-box {
-    flex-shrink: 0; /* Prevent shrinking */
-    margin-right: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 16px;
-    width: 200px;  /* Use a fixed width here */
-    transition: all 0.3s ease;
-}
-
-/* The keyframe animation for sliding from right to left */
 @keyframes slideLeft {
-    0% {
-        transform: translateX(100%); /* Start from the right */
-    }
-    100% {
-        transform: translateX(-100%); /* End at the left */
-    }
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
 }
 
-.demo {
-    text-align: center;
-    margin-top: 40px;
-}
+button { background: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
 
-button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
+button:hover { background: #0056b3; }
 
-button:hover {
-    background-color: #0056b3;
-}
+footer { background: #333; color: white; padding: 20px; text-align: center; }
 
-footer {
-    background-color: #333;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-
-/* Responsiveness */
-@media (max-width: 768px) {
-    .tech-box {
-        width: 160px;  /* Adjust the width for smaller screens */
-        margin-right: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .tech-box {
-        width: 140px;  /* Adjust the width even further on very small screens */
-    }
-}
+/* Responsive */
+@media (max-width: 768px) { .tech-box { width: 160px; margin-right: 10px; } }
+@media (max-width: 480px) { .tech-box { width: 140px; } }
