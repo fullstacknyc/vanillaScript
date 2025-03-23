@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const container = document.querySelector('.tech-boxes-container');
     const techBoxTemplate = document.querySelector('.tech-box'); // Get a reference to one tech-box
 

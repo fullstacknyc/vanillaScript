@@ -1,9 +1,11 @@
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body and Layout */
 body {
     font-family: Arial, sans-serif;
     background: #f4f4f9;
@@ -59,7 +61,7 @@ nav ul li a:focus {
 
 .tech-box {
     flex-shrink: 0;
-    width: 200px; /* Adjust box width as per screen size */
+    width: 200px;
     margin-right: 20px;
     padding: 20px;
     background: white;
@@ -86,14 +88,15 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* Responsiveness */
 @media (max-width: 768px) {
     .tech-box {
-        width: 160px; /* Adjust width for smaller screens */
+        width: 160px;
     }
 }
 
 @media (max-width: 480px) {
     .tech-box {
-        width: 140px; /* Further adjustment for very small screens */
+        width: 140px;
     }
 }
