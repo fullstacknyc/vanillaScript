@@ -24,8 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const firstBoxWidth = boxes[0].offsetWidth + 20; // box width + margin
         if (Math.abs(currentPosition) >= firstBoxWidth) {
             // Move the first box to the end without jumpiness
-            container.appendChild(container.firstElementChild); // Move first box to the end
-            currentPosition = 0; // Reset position without jump
+            const firstBox = container.firstElementChild;
+            container.appendChild(firstBox); // Move first box to the end
+
+            // Reset the current position immediately
+            currentPosition = 0;
         }
     }
 
