@@ -1,28 +1,66 @@
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.querySelector('.tech-boxes-container');
-    const techBoxes = Array.from(document.querySelectorAll('.tech-box')); // Get all tech-box elements
-    const boxWidth = techBoxes[0].offsetWidth + 20; // width of one box including margin
+    const techBoxes = Array.from(document.querySelectorAll('.tech-box'));
+    
+    // Helper to get box width including margin
+    const getBoxWidth = () => techBoxes[0].offsetWidth + 20;
 
-    let totalWidth = boxWidth * techBoxes.length; // Total width of all boxes combined
-    container.style.width = `${totalWidth}px`; // Set the container's total width dynamically
+    // Function to calculate the total container width dynamically
+    const calculateContainerWidth = () => getBoxWidth() * techBoxes.length;
 
-    // Duplicate the tech boxes for seamless scrolling
-    techBoxes.forEach(box => {
-        const clonedBox = box.cloneNode(true);
-        container.appendChild(clonedBox); // Append each cloned box to the container
-    });
+    // Dynamically resize container width based on number of boxes
+    container.style.width = `${calculateContainerWidth()}px`;
+
+    // Function to clone boxes dynamically based on container width
+    const cloneBoxes = () => {
+        const boxWidth = getBoxWidth();
+        const containerWidth = container.offsetWidth;
+        const boxesToClone = Math.ceil(containerWidth / boxWidth);
+
+        for (let i = 0; i < boxesToClone; i++) {
+            techBoxes.forEach(box => {
+                const clonedBox = box.cloneNode(true);
+                container.appendChild(clonedBox);
+            });
+        }
+    };
+
+    // Clone the boxes at the beginning
+    cloneBoxes();
 
     let currentPosition = 0;
+    let totalWidth = calculateContainerWidth();
+
+    // Function to smoothly move the container
     function moveContainer() {
-        currentPosition -= 1; // Move 1px to the left
+        currentPosition -= 1;
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // If the container has moved far enough to the left, reset the position to create an infinite loop
+        // Reset position to start when it reaches the end
         if (Math.abs(currentPosition) >= totalWidth) {
-            currentPosition = 0; // Reset position to the start
+            currentPosition = 0; // Reset to start
+            container.style.transition = 'none'; // Disable transition during reset
+            container.style.transform = `translateX(${currentPosition}px)`;
+
+            // After reset, re-enable transition
+            setTimeout(() => {
+                container.style.transition = 'transform 0.1s linear';
+            }, 100);
         }
     }
 
-    // Move the container every 10ms for a smooth scrolling effect
-    setInterval(moveContainer, 10);
+    // Initial call to start the movement
+    const intervalId = setInterval(moveContainer, 10);
+
+    // Adjust container width on window resize
+    window.addEventListener('resize', function() {
+        container.style.transition = 'none'; // Disable transition during resize
+        container.style.transform = `translateX(0px)`; // Reset the position
+        setTimeout(() => {
+            totalWidth = calculateContainerWidth(); // Recalculate the total width
+            container.style.width = `${calculateContainerWidth()}px`;
+            cloneBoxes(); // Re-clone boxes to fit the new container width
+            container.style.transition = 'transform 0.1s linear'; // Re-enable transition
+        }, 100);
+    });
 });
