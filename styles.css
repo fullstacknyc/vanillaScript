@@ -89,3 +89,17 @@ footer {
     padding: 20px;
     text-align: center;
 }
+
+@media (max-width: 768px) {
+    .technologies {
+        grid-template-columns: 1fr;  /* Single column on small screens */
+    }
+    
+    nav ul {
+        flex-direction: column;  /* Stack navigation items vertically */
+    }
+    
+    nav ul li {
+        margin-bottom: 10px;  /* Space out nav items */
+    }
+}
