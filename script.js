@@ -3,54 +3,50 @@ document.addEventListener('DOMContentLoaded', function () {
     const boxes = Array.from(container.children);
     let currentPosition = 0;
 
-    // Cache the box width + margin, to avoid recalculating repeatedly
-    const boxWidth = boxes[0].offsetWidth + 20; // width of one box + margin
-    const containerWidth = container.offsetWidth;
+    // Cache box dimensions and container width
+    const boxWidth = boxes[0].offsetWidth + 20; // box width + margin
+    let containerWidth = container.offsetWidth;
 
-    // Calculate number of boxes that should be in the container based on initial size
-    let requiredBoxes = Math.ceil(containerWidth / boxWidth);
+    // Calculate the number of boxes required to fill the container width
+    function calculateRequiredBoxes() {
+        const boxCount = Math.ceil(containerWidth / boxWidth);
+        return boxCount;
+    }
 
-    // Ensure the container is filled with the necessary number of boxes
+    // Fill the container with the required number of boxes
     function fillContainer() {
+        const requiredBoxes = calculateRequiredBoxes();
         const currentBoxCount = container.children.length;
-        if (currentBoxCount < requiredBoxes) {
-            const boxesToAdd = requiredBoxes - currentBoxCount;
-            for (let i = 0; i < boxesToAdd; i++) {
-                boxes.forEach(box => container.appendChild(box.cloneNode(true)));
-            }
+
+        // If more boxes are needed, clone them to fill the container
+        while (container.children.length < requiredBoxes) {
+            boxes.forEach(box => container.appendChild(box.cloneNode(true)));
         }
     }
 
-    // Function to move the container continuously
+    // Move the container to create the scrolling effect
     function moveContainer() {
         currentPosition -= 1; // Move left by 1px
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // If the first box has completely moved off the screen
+        // If the first box has completely moved off-screen, move it to the end
         if (Math.abs(currentPosition) >= boxWidth) {
-            // Move the first box to the end just before it goes out of view
             const firstBox = container.firstElementChild;
             container.appendChild(firstBox); // Move first box to the end
-
-            // Reset the current position immediately for smooth scrolling
-            currentPosition = 0;
+            currentPosition = 0; // Reset position to smooth out the transition
         }
 
-        // Request the next animation frame for smoother scrolling
+        // Continue the animation by calling requestAnimationFrame
         requestAnimationFrame(moveContainer);
     }
 
-    // Initial setup: fill the container and start the scrolling
+    // Initial setup: fill the container and start moving the boxes
     fillContainer();
     moveContainer();
 
-    // Recalculate the number of boxes when window is resized
+    // Adjust container size and boxes on window resize
     window.addEventListener('resize', () => {
-        const newContainerWidth = container.offsetWidth;
-        const newBoxCount = Math.ceil(newContainerWidth / boxWidth);
-        if (newBoxCount !== requiredBoxes) {
-            requiredBoxes = newBoxCount;
-            fillContainer();
-        }
+        containerWidth = container.offsetWidth;
+        fillContainer();
     });
 });
