@@ -6,14 +6,19 @@ document.addEventListener('DOMContentLoaded', function () {
     let totalWidth = boxWidth * techBoxes.length; // Total width of all boxes combined
     container.style.width = `${totalWidth}px`; // Set the container's total width dynamically
 
-    // Function to move the container
+    // Duplicate the tech boxes for seamless scrolling
+    techBoxes.forEach(box => {
+        const clonedBox = box.cloneNode(true);
+        container.appendChild(clonedBox); // Append each cloned box to the container
+    });
+
     let currentPosition = 0;
     function moveContainer() {
         currentPosition -= 1; // Move 1px to the left
         container.style.transform = `translateX(${currentPosition}px)`;
 
         // If the container has moved far enough to the left, reset the position to create an infinite loop
-        if (Math.abs(currentPosition) >= totalWidth / 2) {
+        if (Math.abs(currentPosition) >= totalWidth) {
             currentPosition = 0; // Reset position to the start
         }
     }
