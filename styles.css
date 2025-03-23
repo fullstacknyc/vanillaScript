@@ -59,7 +59,7 @@ h1, h2 {
     display: flex;
     animation: slideLeft 15s linear infinite;
     width: 100%; /* Ensure container is full width */
-    min-width: 1000px; /* You can play with this value to see if it fixes layout issues */
+    min-width: 50%; /* You can play with this value to see if it fixes layout issues */
 }
 
 
@@ -86,13 +86,13 @@ h1, h2 {
         transform: translateX(100%);
     }
     25% {
-        transform: translateX(75%);
+        transform: translateX(0%);
     }
     75% {
-        transform: translateX(25%);
+        transform: translateX(-100%);
     }
     100% {
-        transform: translateX(0%);
+        transform: translateX(-200%);
     }
 }
 
@@ -132,7 +132,7 @@ footer a:hover {
 }
 
 /* Mobile-first design */
-@media (max-width: 100%) {
+@media (max-width: 768px) {
     .tech-boxes-container {
         flex-wrap: wrap;
         justify-content: center;
