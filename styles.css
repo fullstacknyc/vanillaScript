@@ -57,11 +57,12 @@ h1, h2 {
 .tech-boxes-container {
     display: flex;
     transition: transform 0.1s linear;
+    width: fit-content; /* Ensures that the container width is based on the content inside */
 }
 
 .tech-box {
     flex-shrink: 0;
-    width: 200px;
+    width: 200px; /* Adjust box width as per screen size */
     margin-right: 20px;
     padding: 20px;
     background: white;
@@ -110,12 +111,12 @@ footer a:hover {
 
 @media (max-width: 768px) {
     .tech-box {
-        width: 160px;
+        width: 160px; /* Adjust width for smaller screens */
     }
 }
 
 @media (max-width: 480px) {
     .tech-box {
-        width: 140px;
+        width: 140px; /* Further adjustment for very small screens */
     }
 }

@@ -8,6 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
         container.appendChild(clone);
     });
 
+    const updateContainerWidth = () => {
+        const boxWidth = techBoxes[0].offsetWidth; // Get the width of a single box
+        const containerWidth = techBoxes.length * boxWidth + (techBoxes.length - 1) * 20; // Total width of all items and gaps
+        container.style.width = `${containerWidth}px`; // Set the width dynamically based on content
+    };
+
+    // Initial update of container width
+    updateContainerWidth();
+
+    // Adjust width dynamically when window is resized
+    window.addEventListener('resize', updateContainerWidth);
+
     const totalWidth = container.scrollWidth; // The total width of the container
 
     let currentPosition = 0; // Start position
