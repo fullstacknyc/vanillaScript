@@ -86,13 +86,13 @@ h1, h2 {
         transform: translateX(100%);
     }
     25% {
-        transform: translateX(0%);
+        transform: translateX(75%);
     }
     75% {
-        transform: translateX(-100%);
+        transform: translateX(25%);
     }
     100% {
-        transform: translateX(-200%);
+        transform: translateX(0%);
     }
 }
 
@@ -132,7 +132,7 @@ footer a:hover {
 }
 
 /* Mobile-first design */
-@media (max-width: 768px) {
+@media (max-width: 100%) {
     .tech-boxes-container {
         flex-wrap: wrap;
         justify-content: center;
