@@ -1,4 +1,3 @@
-/* styles.css */
 * {
     margin: 0;
     padding: 0;
@@ -47,20 +46,40 @@ h1, h2 {
     text-align: center;
 }
 
-.technologies {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+/* Container for the infinite scrolling effect */
+.tech-boxes-wrapper {
+    width: 100%;
+    overflow: hidden; /* Hide the overflow */
     margin-top: 20px;
 }
 
+.tech-boxes-container {
+    display: flex;
+    animation: slideLeft 15s linear infinite; /* Apply the animation */
+}
+
+/* Each individual tech box */
 .tech-box {
-    background-color: #fff;
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 200px;  /* Adjust width as needed */
+    margin-right: 20px;
     padding: 20px;
+    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    font-size: 16px;
+}
+
+/* The keyframe animation for sliding from right to left */
+@keyframes slideLeft {
+    0% {
+        transform: translateX(100%); /* Start from the right */
+    }
+    100% {
+        transform: translateX(-100%); /* End at the left */
+    }
 }
 
 .demo {
@@ -90,16 +109,18 @@ footer {
     text-align: center;
 }
 
+/* Responsiveness */
 @media (max-width: 768px) {
-    .technologies {
-        grid-template-columns: 1fr;  /* Single column on small screens */
+    .tech-boxes-container {
+        flex-direction: column;
+        align-items: center;
     }
-    
+    .tech-box {
+        width: 80%;  /* Adjust the width for smaller screens */
+        margin-bottom: 10px;
+    }
+
     nav ul {
-        flex-direction: column;  /* Stack navigation items vertically */
-    }
-    
-    nav ul li {
-        margin-bottom: 10px;  /* Space out nav items */
+        flex-direction: column;
     }
 }
