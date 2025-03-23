@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Removing cloning logic for better performance.
-    // We will rely on animation for infinite scrolling.
-    
     // Button to change background color
     document.getElementById('changeColorBtn').addEventListener('click', function() {
         // Generate a random color
