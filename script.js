@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Cloning tech boxes for infinite scroll (Optimized)
-    const container = document.querySelector('.tech-boxes-container');
-    const techBoxes = document.querySelectorAll('.tech-box');
-    const cloneContainer = container.cloneNode(true);  // Clone entire container to reduce individual appends
-    container.parentNode.appendChild(cloneContainer);
-
+    // Removing cloning logic for better performance.
+    // We will rely on animation for infinite scrolling.
+    
     // Button to change background color
     document.getElementById('changeColorBtn').addEventListener('click', function() {
         // Generate a random color
