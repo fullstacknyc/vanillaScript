@@ -1,66 +1,54 @@
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.querySelector('.tech-boxes-container');
-    const techBoxes = Array.from(document.querySelectorAll('.tech-box'));
-    
-    // Helper to get box width including margin
+    let techBoxes = Array.from(container.children);
+
+    // Helper to get single box width including margin
     const getBoxWidth = () => techBoxes[0].offsetWidth + 20;
 
-    // Function to calculate the total container width dynamically
-    const calculateContainerWidth = () => getBoxWidth() * techBoxes.length;
-
-    // Dynamically resize container width based on number of boxes
-    container.style.width = `${calculateContainerWidth()}px`;
-
-    // Function to clone boxes dynamically based on container width
-    const cloneBoxes = () => {
+    // Ensure minimum clones to fill the viewport
+    const ensureClones = () => {
         const boxWidth = getBoxWidth();
-        const containerWidth = container.offsetWidth;
-        const boxesToClone = Math.ceil(containerWidth / boxWidth);
+        const containerWidth = container.parentElement.offsetWidth;
+        const minBoxesNeeded = Math.ceil(containerWidth / boxWidth) + 1;
 
-        for (let i = 0; i < boxesToClone; i++) {
+        while (techBoxes.length < minBoxesNeeded) {
             techBoxes.forEach(box => {
-                const clonedBox = box.cloneNode(true);
-                container.appendChild(clonedBox);
+                const clone = box.cloneNode(true);
+                container.appendChild(clone);
             });
+            techBoxes = Array.from(container.children);
         }
     };
 
-    // Clone the boxes at the beginning
-    cloneBoxes();
+    // Initial setup
+    ensureClones();
 
     let currentPosition = 0;
-    let totalWidth = calculateContainerWidth();
+    let totalWidth = getBoxWidth() * techBoxes.length;
 
-    // Function to smoothly move the container
     function moveContainer() {
         currentPosition -= 1;
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // Reset position to start when it reaches the end
-        if (Math.abs(currentPosition) >= totalWidth) {
-            currentPosition = 0; // Reset to start
-            container.style.transition = 'none'; // Disable transition during reset
-            container.style.transform = `translateX(${currentPosition}px)`;
-
-            // After reset, re-enable transition
-            setTimeout(() => {
+        // Seamless wrap-around instead of resetting
+        if (Math.abs(currentPosition) >= getBoxWidth()) {
+            container.appendChild(container.firstElementChild);
+            container.style.transition = 'none';
+            container.style.transform = `translateX(0px)`;
+            currentPosition = 0;
+            requestAnimationFrame(() => {
                 container.style.transition = 'transform 0.1s linear';
-            }, 100);
+            });
         }
     }
 
-    // Initial call to start the movement
-    const intervalId = setInterval(moveContainer, 10);
+    // Start movement
+    setInterval(moveContainer, 10);
 
-    // Adjust container width on window resize
+    // Adjust on resize
     window.addEventListener('resize', function() {
-        container.style.transition = 'none'; // Disable transition during resize
-        container.style.transform = `translateX(0px)`; // Reset the position
-        setTimeout(() => {
-            totalWidth = calculateContainerWidth(); // Recalculate the total width
-            container.style.width = `${calculateContainerWidth()}px`;
-            cloneBoxes(); // Re-clone boxes to fit the new container width
-            container.style.transition = 'transform 0.1s linear'; // Re-enable transition
-        }, 100);
+        container.style.transition = 'none';
+        ensureClones();
+        totalWidth = getBoxWidth() * techBoxes.length;
     });
 });
