@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
         currentPosition -= 1; // Move left by 1px
         container.style.transform = `translateX(${currentPosition}px)`;
 
-        // When the first box goes out of view, wrap it to the end to maintain smooth scrolling
+        // If the first box has gone out of view, move it to the end without a jump
         if (Math.abs(currentPosition) >= boxes[0].offsetWidth) {
             container.appendChild(container.firstElementChild); // Move first element to the end
-            currentPosition = 0; // Reset position to avoid jump
+            currentPosition = 0; // Reset position without a visible jump
         }
     }
 
