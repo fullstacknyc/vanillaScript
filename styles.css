@@ -58,7 +58,7 @@ h1, h2 {
 .tech-boxes-container {
     display: flex;
     transition: transform 0.1s linear;
-    width: fit-content; /* Ensures that the container width is based on the content inside */
+    width: fit-content;
 }
 
 .tech-box {
