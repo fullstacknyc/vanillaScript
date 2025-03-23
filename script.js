@@ -22,8 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // If the first box has gone out of view, move it to the end without a jump
         if (Math.abs(currentPosition) >= boxes[0].offsetWidth) {
-            container.appendChild(container.firstElementChild); // Move first element to the end
-            currentPosition = 0; // Reset position without a visible jump
+            // Move the first box to the end without jump
+            container.appendChild(container.firstElementChild); 
+            currentPosition = 0; // Reset position smoothly without visible jump
         }
     }
 
