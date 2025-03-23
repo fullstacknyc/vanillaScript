@@ -40,9 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
             currentPosition = 0;
             container.style.transition = 'none'; // Disable transition during reset
             container.style.transform = `translateX(${currentPosition}px)`;
+
+            // This will give the container time to reset before transitions resume
             setTimeout(() => {
                 container.style.transition = 'transform 0.1s linear'; // Re-enable transition
-            }, 10); // Re-enable transition after a brief delay
+            }, 100); // Re-enable transition after a brief delay
         }
     }
 
