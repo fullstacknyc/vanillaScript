@@ -28,14 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const firstBox = container.firstElementChild;
             container.appendChild(firstBox); // Move first box to the end
 
-            // Reset the current position immediately
+            // Reset the current position immediately for smooth scrolling
             currentPosition = 0;
         }
+
+        // Request the next animation frame for smoother scrolling
+        requestAnimationFrame(moveContainer);
     }
 
-    // Fill the container initially and make the container scroll continuously
+    // Initialize and start moving the container
     fillContainer();
-    setInterval(moveContainer, 10); // Move the container every 10ms for smooth scrolling
+    moveContainer(); // Start moving the container
 
     // Recalculate the number of boxes if the window resizes
     window.addEventListener('resize', fillContainer);
