@@ -3,29 +3,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const boxes = Array.from(container.children);
     let currentPosition = 0;
 
-    // Duplicate boxes until we cover the container width
+    // Function to move the container smoothly
+    function moveContainer() {
+        currentPosition -= 1; // Move left by 1px
+        container.style.transform = `translateX(${currentPosition}px)`;
+
+        // When the first box goes out of view, wrap it to the end to maintain smooth scrolling
+        if (Math.abs(currentPosition) >= boxes[0].offsetWidth) {
+            container.appendChild(container.firstElementChild); // Move first element to the end
+            currentPosition = 0; // Reset position to avoid jump
+        }
+    }
+
+    // Fill the container with boxes (if necessary)
     function fillContainer() {
         while (container.scrollWidth < container.offsetWidth) {
             boxes.forEach(box => container.appendChild(box.cloneNode(true)));
         }
     }
 
-    // Move the container smoothly
-    function moveContainer() {
-        currentPosition -= 1;
-        container.style.transform = `translateX(${currentPosition}px)`;
-
-        if (Math.abs(currentPosition) >= container.scrollWidth / 2) {
-            currentPosition = 0;
-            container.style.transition = 'none';
-            container.style.transform = `translateX(${currentPosition}px)`;
-
-            setTimeout(() => {
-                container.style.transition = 'transform 0.1s linear';
-            }, 100);
-        }
-    }
-
-    fillContainer();
-    setInterval(moveContainer, 10);
+    fillContainer(); // Ensure enough items to start with
+    setInterval(moveContainer, 10); // Move the container every 10ms for smooth scrolling
 });
